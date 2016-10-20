@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dam.isi.frsf.utn.edu.ar.lab05.modelo.Prioridad;
@@ -103,7 +104,22 @@ public class ProyectoDAO {
     }
 
     public List<Usuario> listarUsuarios(){
-        return null;
+        SQLiteDatabase mydb =dbHelper.getWritableDatabase();
+        List<Usuario> resultado = new ArrayList<>();
+        Usuario usuario = new Usuario();
+        String consulta = "SELECT * FROM " + ProyectoDBMetadata.TABLA_USUARIOS;
+        Cursor cursorPry = mydb.rawQuery(consulta,null);
+
+            while(!cursorPry.moveToNext()){
+                usuario.setId(cursorPry.getInt(0));
+                usuario.setNombre(cursorPry.getString(1));
+                usuario.setCorreoElectronico(cursorPry.getString(2));
+                resultado.add(usuario);
+            }
+
+        Cursor cursor = null;
+        mydb.close();
+        return resultado;
     }
 
     public void finalizar(Integer idTarea){
