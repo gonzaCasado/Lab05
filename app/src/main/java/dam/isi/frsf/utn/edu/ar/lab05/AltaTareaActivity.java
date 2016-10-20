@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,30 +23,42 @@ public class AltaTareaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_alta_tarea);
+
+    }
+
+    protected void onStart() {
+        super.onStart();
+        setContentView(R.layout.activity_alta_tarea);
         Button btnGuardar = (Button)findViewById(R.id.btnGuardar);
-        ProyectoDAO myDao = new ProyectoDAO(this);
+        Button btnCancelar = (Button)findViewById(R.id.btnCanelar);
+
         EditText editDescripcion = (EditText)findViewById(R.id.editText);
         EditText horasEstimadas = (EditText)findViewById(R.id.editText2);
-        Spinner responsable = (Spinner) findViewById(R.id.spinner);
-        ArrayList<String> listaResponsables = new ArrayList<>();
+        final Spinner responsable = (Spinner) findViewById(R.id.spinner);
+        final ArrayList<String> listaResponsables = new ArrayList<>();
+        ProyectoDAO myDao = new ProyectoDAO(this);
         List<Usuario> usuarios = myDao.listarUsuarios();
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,listaResponsables);
-        setContentView(R.layout.activity_alta_tarea);
-        System.out.println( "ASKDJASKDHJKSDAJKLDHJKADSKA" + usuarios.size());
+
         for(int i = 0; i < usuarios.size(); i++){
             listaResponsables.add(usuarios.get(i).getNombre());
+            System.out.println(usuarios.get(i).getNombre() + "         -          " + listaResponsables.size());
         }
-
+        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,listaResponsables);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         responsable.setAdapter(spinnerAdapter);
 
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"HOOLA",Toast.LENGTH_LONG).show();
+            }
+        });
+        btnCancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
             }
         });
     }
-
-
 }

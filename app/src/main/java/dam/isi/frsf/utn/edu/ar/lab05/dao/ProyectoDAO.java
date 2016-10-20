@@ -62,6 +62,7 @@ public class ProyectoDAO {
     }
 
     public Cursor listaTareas(Integer idProyecto){
+        SQLiteDatabase db =dbHelper.getWritableDatabase();
         Cursor cursorPry = db.rawQuery("SELECT "+ProyectoDBMetadata.TablaProyectoMetadata._ID+ " FROM "+ProyectoDBMetadata.TABLA_PROYECTO,null);
         Integer idPry= 0;
         if(cursorPry.moveToFirst()){
@@ -106,16 +107,17 @@ public class ProyectoDAO {
     public List<Usuario> listarUsuarios(){
         SQLiteDatabase mydb =dbHelper.getWritableDatabase();
         List<Usuario> resultado = new ArrayList<>();
-        Usuario usuario = new Usuario();
         String consulta = "SELECT * FROM " + ProyectoDBMetadata.TABLA_USUARIOS;
         Cursor cursorPry = mydb.rawQuery(consulta,null);
 
-            while(!cursorPry.moveToNext()){
-                usuario.setId(cursorPry.getInt(0));
-                usuario.setNombre(cursorPry.getString(1));
-                usuario.setCorreoElectronico(cursorPry.getString(2));
-                resultado.add(usuario);
-            }
+        cursorPry.moveToFirst();
+        do{
+            Usuario usuario = new Usuario();
+            usuario.setId(cursorPry.getInt(0));
+            usuario.setNombre(cursorPry.getString(1));
+            usuario.setCorreoElectronico(cursorPry.getString(2));
+            resultado.add(usuario);
+        }while(cursorPry.moveToNext());
 
         Cursor cursor = null;
         mydb.close();
