@@ -15,6 +15,8 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import java.util.Date;
+
 import dam.isi.frsf.utn.edu.ar.lab05.dao.ProyectoDAO;
 import dam.isi.frsf.utn.edu.ar.lab05.dao.ProyectoDBMetadata;
 
@@ -25,11 +27,14 @@ public class TareaCursorAdapter extends CursorAdapter {
     private LayoutInflater inflador;
     private ProyectoDAO myDao;
     private Context contexto;
+    private long tiempoActual;
     public TareaCursorAdapter (Context contexto, Cursor c, ProyectoDAO dao) {
         super(contexto, c, false);
         myDao= dao;
         this.contexto = contexto;
     }
+
+
 
     @Override
         public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
@@ -47,14 +52,15 @@ public class TareaCursorAdapter extends CursorAdapter {
         // Referencias UI.
         TextView nombre= (TextView) view.findViewById(R.id.tareaTitulo);
         TextView tiempoAsignado= (TextView) view.findViewById(R.id.tareaMinutosAsignados);
-        TextView tiempoTrabajado= (TextView) view.findViewById(R.id.tareaMinutosTrabajados);
+        final TextView tiempoTrabajado= (TextView) view.findViewById(R.id.tareaMinutosTrabajados);
         TextView prioridad= (TextView) view.findViewById(R.id.tareaPrioridad);
         TextView responsable= (TextView) view.findViewById(R.id.tareaResponsable);
         CheckBox finalizada = (CheckBox)  view.findViewById(R.id.tareaFinalizada);
 
+
         final Button btnFinalizar = (Button)   view.findViewById(R.id.tareaBtnFinalizada);
         final Button btnEditar = (Button)   view.findViewById(R.id.tareaBtnEditarDatos);
-        ToggleButton btnEstado = (ToggleButton) view.findViewById(R.id.tareaBtnTrabajando);
+        final ToggleButton btnEstado = (ToggleButton) view.findViewById(R.id.tareaBtnTrabajando);
 
         nombre.setText(cursor.getString(cursor.getColumnIndex(ProyectoDBMetadata.TablaTareasMetadata.TAREA)));
         Integer horasAsigandas = cursor.getInt(cursor.getColumnIndex(ProyectoDBMetadata.TablaTareasMetadata.HORAS_PLANIFICADAS));
@@ -77,6 +83,20 @@ public class TareaCursorAdapter extends CursorAdapter {
                 intEditarAct.putExtra("ID_TAREA",idTarea);
                 context.startActivity(intEditarAct);
 
+            }
+        });
+        btnEstado.setTag(cursor.getInt(cursor.getColumnIndex("_id")));
+        btnEstado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(btnEstado.isChecked())
+                    tiempoActual = System.currentTimeMillis();
+                else {
+                    tiempoActual = (System.currentTimeMillis() - tiempoActual) / 5000;
+                    final Integer idTarea= (Integer) view.getTag();
+
+                    myDao.actualizarTarea(idTarea,tiempoActual);
+                }
             }
         });
 

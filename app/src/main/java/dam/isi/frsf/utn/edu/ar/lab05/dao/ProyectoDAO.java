@@ -38,6 +38,7 @@ public class ProyectoDAO {
     private ProyectoOpenHelper dbHelper;
     private SQLiteDatabase db;
 
+
     public ProyectoDAO(Context c){
         this.dbHelper = new ProyectoOpenHelper(c);
     }
@@ -75,8 +76,22 @@ public class ProyectoDAO {
 
     }
 
-    public void actualizarTarea(Tarea t){
+    public void actualizarTarea(int id, long tiempoTrabajado){
+        SQLiteDatabase mydb =dbHelper.getWritableDatabase();
+        long tiempoNuevo = 0;
+        ContentValues valores = new ContentValues();
+        String consulta = "SELECT "+ProyectoDBMetadata.TablaTareasMetadata.MINUTOS_TRABAJADOS+" FROM "+ProyectoDBMetadata.TABLA_TAREAS + " WHERE " +ProyectoDBMetadata.TablaPrioridadMetadata._ID + " = " + Integer.toString(id);
+        System.out.println("long: "+consulta);
+        Cursor cursorPry = mydb.rawQuery(consulta,null);
 
+        if(cursorPry.moveToFirst()){
+            System.out.println("long: "+ cursorPry.getString(0));
+            tiempoNuevo = tiempoTrabajado + cursorPry.getLong(0);
+        }
+
+        valores.put(ProyectoDBMetadata.TablaTareasMetadata.MINUTOS_TRABAJADOS,tiempoNuevo);
+        mydb.update(ProyectoDBMetadata.TABLA_TAREAS, valores, "_id=?", new String[]{Integer.toString(id)});
+        mydb.close();
     }
 
     public void borrarTarea(Tarea t){
