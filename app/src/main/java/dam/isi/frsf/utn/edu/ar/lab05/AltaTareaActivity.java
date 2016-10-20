@@ -1,5 +1,6 @@
 package dam.isi.frsf.utn.edu.ar.lab05;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dam.isi.frsf.utn.edu.ar.lab05.dao.ProyectoDAO;
+import dam.isi.frsf.utn.edu.ar.lab05.modelo.Prioridad;
+import dam.isi.frsf.utn.edu.ar.lab05.modelo.Proyecto;
+import dam.isi.frsf.utn.edu.ar.lab05.modelo.Tarea;
 import dam.isi.frsf.utn.edu.ar.lab05.modelo.Usuario;
 
 public class AltaTareaActivity extends AppCompatActivity {
@@ -33,16 +37,15 @@ public class AltaTareaActivity extends AppCompatActivity {
         Button btnGuardar = (Button)findViewById(R.id.btnGuardar);
         Button btnCancelar = (Button)findViewById(R.id.btnCanelar);
 
-        EditText editDescripcion = (EditText)findViewById(R.id.editText);
-        EditText horasEstimadas = (EditText)findViewById(R.id.editText2);
+        final EditText editDescripcion = (EditText)findViewById(R.id.editText);
+        final EditText horasEstimadas = (EditText)findViewById(R.id.editText2);
         final Spinner responsable = (Spinner) findViewById(R.id.spinner);
         final ArrayList<String> listaResponsables = new ArrayList<>();
-        ProyectoDAO myDao = new ProyectoDAO(this);
+        final ProyectoDAO myDao = new ProyectoDAO(this);
         List<Usuario> usuarios = myDao.listarUsuarios();
 
         for(int i = 0; i < usuarios.size(); i++){
             listaResponsables.add(usuarios.get(i).getNombre());
-            System.out.println(usuarios.get(i).getNombre() + "         -          " + listaResponsables.size());
         }
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,listaResponsables);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -51,13 +54,22 @@ public class AltaTareaActivity extends AppCompatActivity {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"HOOLA",Toast.LENGTH_LONG).show();
+                Proyecto proyecto = new Proyecto(1,"TP Integrador");
+                Prioridad prioridad = new Prioridad(4, "Urgente");
+                Usuario user = myDao.obtenerUsuario(responsable.getSelectedItem().toString());
+                Tarea tarea = new Tarea (1, false, Integer.parseInt(horasEstimadas.getText().toString()), 0, editDescripcion.getText().toString(), proyecto, prioridad, user);
+
+                myDao.nuevaTarea(tarea);
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+
             }
         });
         btnCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
             }
         });
     }

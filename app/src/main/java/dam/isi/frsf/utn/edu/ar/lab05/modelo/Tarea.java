@@ -9,7 +9,7 @@ public class Tarea {
     private Boolean terminada;
     private Integer horasEstimadas;
     private Integer minutosTrabajados;
-    private Boolean finalizada;
+    private String descripcion;
     private Proyecto proyecto;
     private Prioridad prioridad;
     private Usuario responsable;
@@ -17,12 +17,12 @@ public class Tarea {
     public Tarea() {
     }
 
-    public Tarea(Integer id, Boolean terminada, Integer horasEstimadas, Integer minutosTrabajados, Boolean finalizada, Proyecto proyecto, Prioridad prioridad, Usuario responsable) {
+    public Tarea(Integer id, Boolean terminada, Integer horasEstimadas, Integer minutosTrabajados, String descripcion, Proyecto proyecto, Prioridad prioridad, Usuario responsable) {
         this.id = id;
         this.terminada = terminada;
         this.horasEstimadas = horasEstimadas;
         this.minutosTrabajados = minutosTrabajados;
-        this.finalizada = finalizada;
+        this.descripcion = descripcion;
         this.proyecto = proyecto;
         this.prioridad = prioridad;
         this.responsable = responsable;
@@ -60,12 +60,12 @@ public class Tarea {
         this.minutosTrabajados = minutosTrabajados;
     }
 
-    public Boolean getFinalizada() {
-        return finalizada;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setFinalizada(Boolean finalizada) {
-        this.finalizada = finalizada;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public Proyecto getProyecto() {

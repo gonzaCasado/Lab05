@@ -76,6 +76,17 @@ public class ProyectoDAO {
 
     public void nuevaTarea(Tarea t){
 
+        SQLiteDatabase mydb =dbHelper.getWritableDatabase();
+
+        String consulta = "INSERT INTO " +  ProyectoDBMetadata.TABLA_TAREAS+ "(" +ProyectoDBMetadata.TablaTareasMetadata.TAREA
+        +","+ProyectoDBMetadata.TablaTareasMetadata.HORAS_PLANIFICADAS +","+ProyectoDBMetadata.TablaTareasMetadata.MINUTOS_TRABAJADOS
+        +","+ProyectoDBMetadata.TablaTareasMetadata.PRIORIDAD +","+ ProyectoDBMetadata.TablaTareasMetadata.RESPONSABLE
+        +","+ProyectoDBMetadata.TablaTareasMetadata.PROYECTO+") VALUES ('"+t.getDescripcion()+"',"+t.getHorasEstimadas()
+        +","+t.getMinutosTrabajados()+","+t.getPrioridad().getId()+","+ t.getResponsable().getId()+","+t.getProyecto().getId()+");";
+
+        mydb.rawQuery(consulta,null);
+        mydb.close();
+
     }
 
     public void actualizarTarea(int id, long tiempoTrabajado){
@@ -122,6 +133,22 @@ public class ProyectoDAO {
         Cursor cursor = null;
         mydb.close();
         return resultado;
+    }
+
+    public Usuario obtenerUsuario(String nombre){
+        SQLiteDatabase mydb =dbHelper.getWritableDatabase();
+        String consulta = "SELECT * FROM " + ProyectoDBMetadata.TABLA_USUARIOS + " WHERE " + ProyectoDBMetadata.TablaUsuariosMetadata.USUARIO + " = '" + nombre + "'";
+        Cursor cursorPry = mydb.rawQuery(consulta,null);
+
+        cursorPry.moveToFirst();
+            Usuario usuario = new Usuario();
+            usuario.setId(cursorPry.getInt(0));
+            usuario.setNombre(cursorPry.getString(1));
+            usuario.setCorreoElectronico(cursorPry.getString(2));
+
+        //Cursor cursor = null;
+        mydb.close();
+        return usuario;
     }
 
     public void finalizar(Integer idTarea){
