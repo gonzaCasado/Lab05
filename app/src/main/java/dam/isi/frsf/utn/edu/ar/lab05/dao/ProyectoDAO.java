@@ -3,6 +3,7 @@ package dam.isi.frsf.utn.edu.ar.lab05.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dam.isi.frsf.utn.edu.ar.lab05.modelo.Prioridad;
+import dam.isi.frsf.utn.edu.ar.lab05.modelo.Proyecto;
 import dam.isi.frsf.utn.edu.ar.lab05.modelo.Tarea;
 import dam.isi.frsf.utn.edu.ar.lab05.modelo.Usuario;
 
@@ -77,15 +79,22 @@ public class ProyectoDAO {
     public void nuevaTarea(Tarea t){
 
         SQLiteDatabase mydb =dbHelper.getWritableDatabase();
+        try{
 
-        String consulta = "INSERT INTO " +  ProyectoDBMetadata.TABLA_TAREAS+ "(" +ProyectoDBMetadata.TablaTareasMetadata.TAREA
-        +","+ProyectoDBMetadata.TablaTareasMetadata.HORAS_PLANIFICADAS +","+ProyectoDBMetadata.TablaTareasMetadata.MINUTOS_TRABAJADOS
-        +","+ProyectoDBMetadata.TablaTareasMetadata.PRIORIDAD +","+ ProyectoDBMetadata.TablaTareasMetadata.RESPONSABLE
-        +","+ProyectoDBMetadata.TablaTareasMetadata.PROYECTO+") VALUES ('"+t.getDescripcion()+"',"+t.getHorasEstimadas()
-        +","+t.getMinutosTrabajados()+","+t.getPrioridad().getId()+","+ t.getResponsable().getId()+","+t.getProyecto().getId()+");";
+            String consulta = "INSERT INTO " +  ProyectoDBMetadata.TABLA_TAREAS+ "(" +ProyectoDBMetadata.TablaTareasMetadata.TAREA
+                    +","+ProyectoDBMetadata.TablaTareasMetadata.HORAS_PLANIFICADAS +","+ProyectoDBMetadata.TablaTareasMetadata.MINUTOS_TRABAJADOS
+                    +","+ProyectoDBMetadata.TablaTareasMetadata.PRIORIDAD +","+ ProyectoDBMetadata.TablaTareasMetadata.RESPONSABLE
+                    +","+ProyectoDBMetadata.TablaTareasMetadata.PROYECTO+") VALUES ('"+t.getDescripcion()+"',"+t.getHorasEstimadas()
+                    +","+t.getMinutosTrabajados()+","+t.getPrioridad().getId()+","+ t.getResponsable().getId()+","+t.getProyecto().getId()+");";
+            Log.d("LAB05-MAIN","INSERCION DE UNA FILA: "+consulta);
+            mydb.rawQuery(consulta,null);
+        }catch(SQLException e){
+            Log.d("LAB05-MAIN","INSERCION DE UNA FILA: _"+e.toString());
+        }
+        finally {
+            mydb.endTransaction();
+        }
 
-        mydb.rawQuery(consulta,null);
-        mydb.close();
 
     }
 
@@ -104,7 +113,7 @@ public class ProyectoDAO {
 
         valores.put(ProyectoDBMetadata.TablaTareasMetadata.MINUTOS_TRABAJADOS,tiempoNuevo);
         mydb.update(ProyectoDBMetadata.TABLA_TAREAS, valores, "_id=?", new String[]{Integer.toString(id)});
-        mydb.close();
+
     }
 
     public void borrarTarea(Tarea t){
@@ -131,7 +140,7 @@ public class ProyectoDAO {
         }while(cursorPry.moveToNext());
 
         Cursor cursor = null;
-        mydb.close();
+
         return resultado;
     }
 
@@ -139,25 +148,30 @@ public class ProyectoDAO {
         SQLiteDatabase mydb =dbHelper.getWritableDatabase();
         String consulta = "SELECT * FROM " + ProyectoDBMetadata.TABLA_USUARIOS + " WHERE " + ProyectoDBMetadata.TablaUsuariosMetadata.USUARIO + " = '" + nombre + "'";
         Cursor cursorPry = mydb.rawQuery(consulta,null);
-
         cursorPry.moveToFirst();
             Usuario usuario = new Usuario();
             usuario.setId(cursorPry.getInt(0));
             usuario.setNombre(cursorPry.getString(1));
             usuario.setCorreoElectronico(cursorPry.getString(2));
-
-        //Cursor cursor = null;
-        mydb.close();
         return usuario;
     }
-
+    public Proyecto obtenerProyecto(){
+        SQLiteDatabase mydb =dbHelper.getWritableDatabase();
+        String consulta = "SELECT * FROM " + ProyectoDBMetadata.TABLA_PROYECTO;
+        Cursor cursorPry = mydb.rawQuery(consulta,null);
+        cursorPry.moveToFirst();
+        Proyecto proyecto = new Proyecto();
+        proyecto.setId(cursorPry.getInt(0));
+        proyecto.setNombre(cursorPry.getString(1));
+        return proyecto;
+    }
     public void finalizar(Integer idTarea){
         //Establecemos los campos-valores a actualizar
         ContentValues valores = new ContentValues();
         valores.put(ProyectoDBMetadata.TablaTareasMetadata.FINALIZADA,1);
         SQLiteDatabase mydb =dbHelper.getWritableDatabase();
         mydb.update(ProyectoDBMetadata.TABLA_TAREAS, valores, "_id=?", new String[]{idTarea.toString()});
-        mydb.close();
+
     }
 
     public List<Tarea> listarDesviosPlanificacion(Boolean soloTerminadas,Integer desvioMaximoMinutos){

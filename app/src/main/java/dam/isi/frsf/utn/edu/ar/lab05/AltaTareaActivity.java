@@ -54,7 +54,7 @@ public class AltaTareaActivity extends AppCompatActivity {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Proyecto proyecto = new Proyecto(1,"TP Integrador");
+                Proyecto proyecto = myDao.obtenerProyecto();
                 Prioridad prioridad = new Prioridad(4, "Urgente");
                 Usuario user = myDao.obtenerUsuario(responsable.getSelectedItem().toString());
                 Tarea tarea = new Tarea (1, false, Integer.parseInt(horasEstimadas.getText().toString()), 0, editDescripcion.getText().toString(), proyecto, prioridad, user);

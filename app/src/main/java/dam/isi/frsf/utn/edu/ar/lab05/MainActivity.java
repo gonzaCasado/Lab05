@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         tca = new TareaCursorAdapter(MainActivity.this,cursor,proyectoDAO);
         lvTareas.setAdapter(tca);
+        lvTareas.deferNotifyDataSetChanged();
         Log.d("LAB05-MAIN","fin resume");
     }
 
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        lvTareas.deferNotifyDataSetChanged();
         return super.onOptionsItemSelected(item);
     }
 }

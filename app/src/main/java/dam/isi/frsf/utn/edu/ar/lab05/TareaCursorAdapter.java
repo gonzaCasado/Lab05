@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CursorAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -58,6 +59,7 @@ public class TareaCursorAdapter extends CursorAdapter {
         CheckBox finalizada = (CheckBox)  view.findViewById(R.id.tareaFinalizada);
 
 
+
         final Button btnFinalizar = (Button)   view.findViewById(R.id.tareaBtnFinalizada);
         final Button btnEditar = (Button)   view.findViewById(R.id.tareaBtnEditarDatos);
         final ToggleButton btnEstado = (ToggleButton) view.findViewById(R.id.tareaBtnTrabajando);
@@ -96,6 +98,9 @@ public class TareaCursorAdapter extends CursorAdapter {
                     final Integer idTarea= (Integer) view.getTag();
 
                     myDao.actualizarTarea(idTarea,tiempoActual);
+
+                    Intent intentActualizar = new Intent(contexto,MainActivity.class);
+                    context.startActivity(intentActualizar);
                 }
             }
         });
