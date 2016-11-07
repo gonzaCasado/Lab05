@@ -79,6 +79,7 @@ public class ProyectoDAO {
     public void nuevaTarea(Tarea t){
 
         SQLiteDatabase mydb =dbHelper.getWritableDatabase();
+        mydb.beginTransaction();
         try{
 
             String consulta = "INSERT INTO " +  ProyectoDBMetadata.TABLA_TAREAS+ "(" +ProyectoDBMetadata.TablaTareasMetadata.TAREA
@@ -88,6 +89,11 @@ public class ProyectoDAO {
                     +","+t.getMinutosTrabajados()+","+t.getPrioridad().getId()+","+ t.getResponsable().getId()+","+t.getProyecto().getId()+");";
             Log.d("LAB05-MAIN","INSERCION DE UNA FILA: "+consulta);
             mydb.rawQuery(consulta,null);
+            mydb.execSQL(consulta);
+            mydb.setTransactionSuccessful();
+            //mydb.close();
+            //mydb.endTransaction();
+
         }catch(SQLException e){
             Log.d("LAB05-MAIN","INSERCION DE UNA FILA: _"+e.toString());
         }
