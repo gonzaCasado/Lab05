@@ -93,13 +93,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item){
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch(item.getItemId()){
-            case R.id.opcSi:
+            case R.id.darBajaTarea:
                 //llamar a borrarTarea(idTarea) de ProyectoDAO;
                 Toast.makeText(this,"Usted ha eliminado la tarea: ",Toast.LENGTH_LONG).show();
-                return true;
-            case R.id.opcNo:
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                startActivity(intent);
                 return true;
             default:
                 return super.onContextItemSelected(item);
