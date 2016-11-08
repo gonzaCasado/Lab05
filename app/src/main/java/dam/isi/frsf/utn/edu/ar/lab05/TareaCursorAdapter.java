@@ -29,6 +29,7 @@ public class TareaCursorAdapter extends CursorAdapter {
     private ProyectoDAO myDao;
     private Context contexto;
     private long tiempoActual;
+    public static int filaSeleccionada;
     public TareaCursorAdapter (Context contexto, Cursor c, ProyectoDAO dao) {
         super(contexto, c, false);
         myDao= dao;
@@ -44,6 +45,9 @@ public class TareaCursorAdapter extends CursorAdapter {
         View vista = inflador.inflate(R.layout.fila_tarea,viewGroup,false);
         return vista;
     }
+
+
+
 
     @Override
     public void bindView(View view, final Context context, final Cursor cursor) {
@@ -120,6 +124,32 @@ public class TareaCursorAdapter extends CursorAdapter {
                 backGroundUpdate.start();
             }
         });
+
+
+
+
+
+
     }
+/*    public View getView(final int position, View convertView, ViewGroup parent) {
+        View row = convertView;
+        if (row == null) row = inflador.inflate(R.layout.fila_tarea, parent, false);
+
+
+        row.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                filaSeleccionada = getItem(position).hashCode();
+                return false;
+            }
+        });
+
+        return (row);
+
+    }
+
+    public static int getFilaSeleccionada(){
+        return filaSeleccionada;
+    }*/
 }
 

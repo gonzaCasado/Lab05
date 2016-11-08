@@ -92,7 +92,6 @@ public class ProyectoDAO {
             mydb.execSQL(consulta);
             mydb.setTransactionSuccessful();
             //mydb.close();
-            //mydb.endTransaction();
 
         }catch(SQLException e){
             Log.d("LAB05-MAIN","INSERCION DE UNA FILA: _"+e.toString());
@@ -100,8 +99,29 @@ public class ProyectoDAO {
         finally {
             mydb.endTransaction();
         }
+    }
+
+    public void editarTarea(int idTarea, int nuevasHorasEstimadas, String nuevaDesc, Usuario nuevoUsuario  ) {
+        SQLiteDatabase mydb =dbHelper.getWritableDatabase();
+        mydb.beginTransaction();
+        try{
+
+            String consulta = "UPDATE " + ProyectoDBMetadata.TABLA_TAREAS+ " SET " +ProyectoDBMetadata.TablaTareasMetadata.TAREA
+                    +"='"+nuevaDesc+"',"+ProyectoDBMetadata.TablaTareasMetadata.HORAS_PLANIFICADAS +"="+nuevasHorasEstimadas+","
+                    +ProyectoDBMetadata.TablaTareasMetadata.RESPONSABLE+"="+nuevoUsuario.getId() +" WHERE "
+                    +ProyectoDBMetadata.TablaTareasMetadata._ID+"="+idTarea+";";
 
 
+            mydb.rawQuery(consulta,null);
+            mydb.execSQL(consulta);
+            mydb.setTransactionSuccessful();
+
+        }catch(SQLException e){
+            Log.d("LAB05-MAIN","Edicion de una fila: _"+e.toString());
+        }
+        finally {
+            mydb.endTransaction();
+        }
     }
 
     public void actualizarTarea(int id, long tiempoTrabajado){
@@ -122,7 +142,43 @@ public class ProyectoDAO {
 
     }
 
-    public void borrarTarea(Tarea t){
+    public void borrarTarea(int idTarea){
+        SQLiteDatabase mydb =dbHelper.getWritableDatabase();
+        mydb.beginTransaction();
+        try{
+            String consulta = "DELETE FROM " + ProyectoDBMetadata.TABLA_TAREAS+ " WHERE "
+                    +ProyectoDBMetadata.TablaTareasMetadata._ID+"="+idTarea+";";
+
+            mydb.rawQuery(consulta,null);
+            mydb.execSQL(consulta);
+            mydb.setTransactionSuccessful();
+
+        }catch(SQLException e){
+            Log.d("LAB05-MAIN","Borrado de una fila: _"+e.toString());
+        }
+        finally {
+            mydb.endTransaction();
+        }
+
+    }
+
+    public void tareasConMasDesvios(){
+        SQLiteDatabase mydb =dbHelper.getReadableDatabase();
+        mydb.beginTransaction();
+        try{
+            String consulta = "SELECT "+ProyectoDBMetadata.TablaTareasMetadata.TAREA+" FROM " +ProyectoDBMetadata.TABLA_TAREAS + " WHERE "
+                    +ProyectoDBMetadata.TablaTareasMetadata.HORAS_PLANIFICADAS+"-"+ProyectoDBMetadata.TablaTareasMetadata.MINUTOS_TRABAJADOS +"<0;";
+
+            mydb.rawQuery(consulta,null);
+            mydb.execSQL(consulta);
+            mydb.setTransactionSuccessful();
+
+        }catch(SQLException e){
+            Log.d("LAB05-MAIN","Consulta de tareas con mas desvios: _"+e.toString());
+        }
+        finally {
+            mydb.endTransaction();
+        }
 
     }
 

@@ -44,12 +44,35 @@ public class AltaTareaActivity extends AppCompatActivity {
         final ProyectoDAO myDao = new ProyectoDAO(this);
         List<Usuario> usuarios = myDao.listarUsuarios();
 
+        Bundle extras = getIntent().getExtras();
+        final int tareaAEditar = extras.getInt("ID_TAREA");
+
         for(int i = 0; i < usuarios.size(); i++){
             listaResponsables.add(usuarios.get(i).getNombre());
         }
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,listaResponsables);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         responsable.setAdapter(spinnerAdapter);
+
+        if(tareaAEditar!=0) {
+
+            Toast.makeText(this,"Editar tarea: "+tareaAEditar,Toast.LENGTH_LONG).show();
+
+            btnGuardar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Proyecto proyecto = myDao.obtenerProyecto();
+                    Usuario user = myDao.obtenerUsuario(responsable.getSelectedItem().toString());
+                    myDao.editarTarea(tareaAEditar,Integer.parseInt(horasEstimadas.getText().toString()), editDescripcion.getText().toString(), user );
+                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(intent);
+
+                }
+            });
+
+
+        }
+        else{
 
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +88,10 @@ public class AltaTareaActivity extends AppCompatActivity {
 
             }
         });
+
+        }
+
+
         btnCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
