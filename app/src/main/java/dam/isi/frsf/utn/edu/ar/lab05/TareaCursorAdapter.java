@@ -126,11 +126,8 @@ public class TareaCursorAdapter extends CursorAdapter {
         });
 
 
-
-
-
-
     }
+
 /*    public View getView(final int position, View convertView, ViewGroup parent) {
         View row = convertView;
         if (row == null) row = inflador.inflate(R.layout.fila_tarea, parent, false);
