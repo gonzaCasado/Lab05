@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CursorAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -20,6 +21,7 @@ import java.util.Date;
 
 import dam.isi.frsf.utn.edu.ar.lab05.dao.ProyectoDAO;
 import dam.isi.frsf.utn.edu.ar.lab05.dao.ProyectoDBMetadata;
+import dam.isi.frsf.utn.edu.ar.lab05.modelo.Proyecto;
 
 /**
  * Created by mdominguez on 06/10/16.
@@ -61,6 +63,8 @@ public class TareaCursorAdapter extends CursorAdapter {
         TextView prioridad= (TextView) view.findViewById(R.id.tareaPrioridad);
         TextView responsable= (TextView) view.findViewById(R.id.tareaResponsable);
         CheckBox finalizada = (CheckBox)  view.findViewById(R.id.tareaFinalizada);
+        ImageButton botonTacho = (ImageButton) view.findViewById(R.id.imageButton);
+
 
 
 
@@ -124,6 +128,21 @@ public class TareaCursorAdapter extends CursorAdapter {
                 backGroundUpdate.start();
             }
         });
+
+        botonTacho.setTag(cursor.getInt(cursor.getColumnIndex("_id")));
+        botonTacho.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                final Integer idTarea= (Integer) view.getTag();
+                Proyecto proyecto = myDao.obtenerProyecto();
+                myDao.borrarTarea(idTarea);
+
+                Intent intentActualizar = new Intent(contexto,MainActivity.class);
+                context.startActivity(intentActualizar);
+            }
+            });
+
+
+
 
 
     }

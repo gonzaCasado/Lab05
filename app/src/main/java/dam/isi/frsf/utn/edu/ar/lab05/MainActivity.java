@@ -53,19 +53,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         lvTareas = (ListView) findViewById(R.id.listaTareas);
-
-        ListAdapter listAdapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         lvTareas.setAdapter( tca );
 
-/*        lvTareas.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?>parent, View view, int position, long id){
-                String itemValue= (String) lvTareas.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(), itemValue+"..."+position, Toast.LENGTH_LONG).show();
-                Toast.makeText(getApplicationContext(),"TOASTT: ",Toast.LENGTH_LONG).show();
 
-            }
-        });*/
     }
 
 
@@ -83,15 +73,6 @@ public class MainActivity extends AppCompatActivity {
         lvTareas.deferNotifyDataSetChanged();
         Log.d("LAB05-MAIN","fin resume");
 
-        lvTareas.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?>parent, View view, int position, long id){
-                String itemValue= (String) lvTareas.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(), itemValue+"..."+position, Toast.LENGTH_LONG).show();
-                Toast.makeText(getApplicationContext(),"TOASTT: ",Toast.LENGTH_LONG).show();
-
-            }
-        });
     }
 
     @Override
