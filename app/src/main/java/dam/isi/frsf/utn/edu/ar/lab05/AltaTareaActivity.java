@@ -56,17 +56,24 @@ public class AltaTareaActivity extends AppCompatActivity {
 
         if(tareaAEditar!=0) {
 
-            Toast.makeText(this,"Editar tarea: "+tareaAEditar,Toast.LENGTH_LONG).show();
+            //Toast.makeText(this,"Editar tarea: "+tareaAEditar,Toast.LENGTH_LONG).show();
 
             btnGuardar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Proyecto proyecto = myDao.obtenerProyecto();
                     Usuario user = myDao.obtenerUsuario(responsable.getSelectedItem().toString());
-                    myDao.editarTarea(tareaAEditar,Integer.parseInt(horasEstimadas.getText().toString()), editDescripcion.getText().toString(), user );
-                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    if((horasEstimadas.getText().length()!=0)&&editDescripcion.getText().length()!=0){
+                        myDao.editarTarea(tareaAEditar,Integer.parseInt(horasEstimadas.getText().toString()), editDescripcion.getText().toString(), user );
+                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(),"Ingrese descripción y horas estimadas",Toast.LENGTH_LONG).show();
+                    }
+                    /*Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                     startActivity(intent);
-
+*/
                 }
             });
 
@@ -80,12 +87,15 @@ public class AltaTareaActivity extends AppCompatActivity {
                 Proyecto proyecto = myDao.obtenerProyecto();
                 Prioridad prioridad = new Prioridad(4, "Urgente");
                 Usuario user = myDao.obtenerUsuario(responsable.getSelectedItem().toString());
-                Tarea tarea = new Tarea (1, false, Integer.parseInt(horasEstimadas.getText().toString()), 0, editDescripcion.getText().toString(), proyecto, prioridad, user);
-
-                myDao.nuevaTarea(tarea);
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                startActivity(intent);
-
+                if((horasEstimadas.getText().length()!=0)&&editDescripcion.getText().length()!=0){
+                    Tarea tarea = new Tarea (1, false, Integer.parseInt(horasEstimadas.getText().toString()), 0, editDescripcion.getText().toString(), proyecto, prioridad, user);
+                    myDao.nuevaTarea(tarea);
+                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(),"Ingrese descripción y horas estimadas",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
