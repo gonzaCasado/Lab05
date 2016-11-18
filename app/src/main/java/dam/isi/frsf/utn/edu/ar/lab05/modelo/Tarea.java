@@ -1,5 +1,8 @@
 package dam.isi.frsf.utn.edu.ar.lab05.modelo;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by mdominguez on 06/10/16.
  */
@@ -26,6 +29,17 @@ public class Tarea {
         this.proyecto = proyecto;
         this.prioridad = prioridad;
         this.responsable = responsable;
+    }
+
+    public Tarea(JSONObject objetoJSON) throws JSONException {
+        this.id = objetoJSON.getInt("id");
+        this.terminada=false;
+        this.horasEstimadas = objetoJSON.getInt("horasEstimadas");
+        this.minutosTrabajados = objetoJSON.getInt("minutosTrabajados");
+        this.descripcion = objetoJSON.getString("descripcion");
+        this.proyecto = new Proyecto(objetoJSON.getInt("proyectoId"));
+        this.prioridad = new Prioridad(objetoJSON.getInt("prioridadId"));
+        this.responsable = new Usuario(objetoJSON.getInt("usuarioId"));
     }
 
 

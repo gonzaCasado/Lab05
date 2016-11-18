@@ -18,6 +18,10 @@ public class Proyecto {
         this.nombre = nombre;
     }
 
+    public Proyecto(Integer id){
+        this.id=id;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -78,6 +78,10 @@ public class ProyectoDAO {
 
     public void nuevaTarea(Tarea t){
 
+        EjemploPost.enviarOperacionToAPI("POST",t.getDescripcion().toString(),t.getResponsable().getId(),t.getHorasEstimadas(),t.getProyecto().getId(),t.getMinutosTrabajados(),t.getPrioridad().getId());
+        //Log.d("TEST-ARR","NUEVAtAREA: "+t.getId());
+
+
         SQLiteDatabase mydb =dbHelper.getWritableDatabase();
         mydb.beginTransaction();
         try{
@@ -91,7 +95,8 @@ public class ProyectoDAO {
             mydb.rawQuery(consulta,null);
             mydb.execSQL(consulta);
             mydb.setTransactionSuccessful();
-            //mydb.close();
+
+
 
         }catch(SQLException e){
             Log.d("LAB05-MAIN","INSERCION DE UNA FILA: _"+e.toString());
@@ -102,6 +107,13 @@ public class ProyectoDAO {
     }
 
     public void editarTarea(int idTarea, int nuevasHorasEstimadas, String nuevaDesc, Usuario nuevoUsuario  ) {
+
+
+
+        Integer nuevasHoras = nuevasHorasEstimadas;
+        EjemploPost.enviarOperacionToAPIUPDATE(idTarea,"PUT",nuevasHoras,nuevaDesc,nuevoUsuario.getId());
+
+
         SQLiteDatabase mydb =dbHelper.getWritableDatabase();
         mydb.beginTransaction();
         try{
@@ -125,6 +137,7 @@ public class ProyectoDAO {
     }
 
     public void actualizarTarea(int id, long tiempoTrabajado){
+
         SQLiteDatabase mydb =dbHelper.getWritableDatabase();
         long tiempoNuevo = 0;
         ContentValues valores = new ContentValues();
@@ -143,6 +156,9 @@ public class ProyectoDAO {
     }
 
     public void borrarTarea(int idTarea){
+        EjemploPost.enviarOperacionToAPIDELETE("DELETE",idTarea);
+
+
         SQLiteDatabase mydb =dbHelper.getWritableDatabase();
         mydb.beginTransaction();
         try{

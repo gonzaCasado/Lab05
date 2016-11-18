@@ -19,6 +19,10 @@ public class Usuario {
         this.correoElectronico = correoElectronico;
     }
 
+    public Usuario (Integer id){
+        this.id=id;
+    }
+
     public Integer getId() {
         return id;
     }

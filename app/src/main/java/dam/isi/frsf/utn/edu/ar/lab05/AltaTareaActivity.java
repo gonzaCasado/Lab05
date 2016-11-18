@@ -126,6 +126,8 @@ public class AltaTareaActivity extends AppCompatActivity {
                     myDao.nuevaTarea(tarea);
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                     startActivity(intent);
+                    Toast.makeText(getApplicationContext(),"Id tarea: "+ tarea.getId(),Toast.LENGTH_LONG).show();
+
                 }
                 else {
                     Toast.makeText(getApplicationContext(),"Ingrese descripción y horas estimadas",Toast.LENGTH_LONG).show();
