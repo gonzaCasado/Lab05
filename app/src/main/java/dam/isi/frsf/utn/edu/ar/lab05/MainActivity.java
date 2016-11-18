@@ -1,11 +1,19 @@
 package dam.isi.frsf.utn.edu.ar.lab05;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,6 +30,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.util.Arrays;
+
 import dam.isi.frsf.utn.edu.ar.lab05.dao.ProyectoDAO;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,12 +40,17 @@ public class MainActivity extends AppCompatActivity {
     private ProyectoDAO proyectoDAO;
     private Cursor cursor;
     private TareaCursorAdapter tca;
+    private boolean flagPermisoPedido;
+    private static final int PERMISSION_REQUEST_CONTACT =999;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        askForContactPermission();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -48,10 +63,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
         lvTareas = (ListView) findViewById(R.id.listaTareas);
         lvTareas.setAdapter( tca );
 
@@ -62,27 +73,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("LAB05-MAIN","en resume");
         proyectoDAO = new ProyectoDAO(MainActivity.this);
         proyectoDAO.open();
         cursor = proyectoDAO.listaTareas(1);
-        Log.d("LAB05-MAIN","mediol "+cursor.getCount());
 
         tca = new TareaCursorAdapter(MainActivity.this,cursor,proyectoDAO);
         lvTareas.setAdapter(tca);
         lvTareas.deferNotifyDataSetChanged();
-        Log.d("LAB05-MAIN","fin resume");
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("LAB05-MAIN","on pausa");
 
         if(cursor!=null) cursor.close();
         if(proyectoDAO!=null) proyectoDAO.close();
-        Log.d("LAB05-MAIN","fin on pausa");
 
     }
 
@@ -129,6 +135,61 @@ public class MainActivity extends AppCompatActivity {
         }
         lvTareas.deferNotifyDataSetChanged();
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void askForContactPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.CALL_PHONE)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Permisos Peligrosos!!!");
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setMessage("Puedo acceder a un permiso peligroso???");
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @TargetApi(Build.VERSION_CODES.M)
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            flagPermisoPedido=true;
+                            requestPermissions(
+                                    new String[]
+                                            {Manifest.permission.READ_CONTACTS,Manifest.permission.WRITE_CONTACTS,Manifest.permission.GET_ACCOUNTS}
+                                    , PERMISSION_REQUEST_CONTACT);
+                        }
+                    });
+                    builder.show();
+                } else {
+                    flagPermisoPedido=true;
+                    ActivityCompat.requestPermissions(this,
+                            new String[]
+                                    {Manifest.permission.READ_CONTACTS,Manifest.permission.WRITE_CONTACTS,Manifest.permission.GET_ACCOUNTS}
+                            , PERMISSION_REQUEST_CONTACT);
+                }
+
+            }
+        }
+    }
+
+    public void hacerAlgoQueRequeriaPermisosPeligrosos(){
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        Log.d("ESCRIBIR_JSON","req code"+requestCode+ " "+ Arrays.toString(permissions)+" ** "+Arrays.toString(grantResults));
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CONTACT: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    hacerAlgoQueRequeriaPermisosPeligrosos();
+                } else {
+                    Toast.makeText(this, "No permission for contacts", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+
     }
 
 }
