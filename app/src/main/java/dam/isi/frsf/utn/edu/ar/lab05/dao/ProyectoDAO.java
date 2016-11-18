@@ -260,4 +260,26 @@ public class ProyectoDAO {
     }
 
 
+    public void nuevoUser(Usuario u) {
+
+        SQLiteDatabase mydb =dbHelper.getWritableDatabase();
+        mydb.beginTransaction();
+        try{
+
+            String consulta = "INSERT INTO " +  ProyectoDBMetadata.TABLA_USUARIOS+ "(" +ProyectoDBMetadata.TablaUsuariosMetadata.USUARIO
+                    +","+ProyectoDBMetadata.TablaUsuariosMetadata.MAIL+ ") VALUES ('"+u.getNombre()+"','"+u.getCorreoElectronico()+"');";
+            Log.d("LAB05-MAIN","INSERCION DE UNA USUARIO: "+consulta);
+            mydb.rawQuery(consulta,null);
+            mydb.execSQL(consulta);
+            mydb.setTransactionSuccessful();
+
+
+
+        }catch(SQLException e){
+            Log.d("LAB05-MAIN","INSERCION DE UNA FILA: _"+e.toString());
+        }
+        finally {
+            mydb.endTransaction();
+        }
+    }
 }

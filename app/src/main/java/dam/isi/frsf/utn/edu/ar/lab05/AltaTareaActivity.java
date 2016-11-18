@@ -37,6 +37,9 @@ public class AltaTareaActivity extends AppCompatActivity {
 
     String nombre;
     final ArrayList<String> listaResponsables = new ArrayList<>();
+    Usuario userNuevo;
+
+
 
 
     @Override
@@ -61,24 +64,21 @@ public class AltaTareaActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         final int tareaAEditar = extras.getInt("ID_TAREA");
-
+        listaResponsables.add(" Seleccione Responsable ");
+        listaResponsables.add(" - ingrese nombre de contacto - ");
         for(int i = 0; i < usuarios.size(); i++){
             listaResponsables.add(usuarios.get(i).getNombre());
         }
-        listaResponsables.add("ingrese nombre de contacto");
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,listaResponsables);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         responsable.setAdapter(spinnerAdapter);
+
 
         responsable.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
-                    case 0:
-                        break;
-                    case 1:
-                        break;
-                    case 2:
+                    case (1):
                         createDialogo();
                         buscarContactos(nombre);
                         break;
@@ -98,14 +98,31 @@ public class AltaTareaActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Proyecto proyecto = myDao.obtenerProyecto();
-                    Usuario user = myDao.obtenerUsuario(responsable.getSelectedItem().toString());
-                    if((horasEstimadas.getText().length()!=0)&&editDescripcion.getText().length()!=0){
-                        myDao.editarTarea(tareaAEditar,Integer.parseInt(horasEstimadas.getText().toString()), editDescripcion.getText().toString(), user );
+                    List<Usuario> usuarios = myDao.listarUsuarios();
+                    Prioridad prioridad = new Prioridad(4, "Urgente");
+                    for(int i=0;i<usuarios.size();i++) {
+                        if (responsable.getSelectedItem().toString().equals(usuarios.get(i).getNombre())) {
+                            userNuevo = usuarios.get(i);
+                            break;
+                        }
+                    }
+                    if(userNuevo==null&&responsable.getSelectedItem().toString()!=" Seleccione Responsable "){
+                        nombre=responsable.getSelectedItem().toString();
+                        userNuevo=new Usuario(1, nombre, nombre+"@gmail.com");
+                        myDao.nuevoUser(userNuevo);
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(),"Ingrese descripción, horas estimadas y responsable",Toast.LENGTH_LONG).show();
+                    }
+                    if((horasEstimadas.getText().length()!=0)&&editDescripcion.getText().length()!=0&&
+                            (responsable.getSelectedItem().toString()!=" Seleccione Responsable ")){
+                        myDao.editarTarea(tareaAEditar,Integer.parseInt(horasEstimadas.getText().toString()), editDescripcion.getText().toString(), userNuevo );
+                        System.out.println("EL USUARIO QUE AGREGASTE SE LLAMA:    "+ userNuevo.getNombre());
                         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                         startActivity(intent);
                     }
                     else {
-                        Toast.makeText(getApplicationContext(),"Ingrese descripción y horas estimadas",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),"Ingrese descripción, horas estimadas y responsable",Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -119,18 +136,33 @@ public class AltaTareaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Proyecto proyecto = myDao.obtenerProyecto();
+                List<Usuario> usuarios = myDao.listarUsuarios();
                 Prioridad prioridad = new Prioridad(4, "Urgente");
-                Usuario user = myDao.obtenerUsuario(responsable.getSelectedItem().toString());
-                if((horasEstimadas.getText().length()!=0)&&editDescripcion.getText().length()!=0){
-                    Tarea tarea = new Tarea (1, false, Integer.parseInt(horasEstimadas.getText().toString()), 0, editDescripcion.getText().toString(), proyecto, prioridad, user);
+                for(int i=0;i<usuarios.size();i++) {
+                    if (responsable.getSelectedItem().toString().equals(usuarios.get(i).getNombre())) {
+                        userNuevo = usuarios.get(i);
+                        break;
+                    }
+                }
+                if(userNuevo==null&&responsable.getSelectedItem().toString()!=" Seleccione Responsable "){
+                    nombre=responsable.getSelectedItem().toString();
+                    userNuevo=new Usuario(1, nombre, nombre+"@gmail.com");
+                    myDao.nuevoUser(userNuevo);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(),"Ingrese descripción, horas estimadas y responsable",Toast.LENGTH_LONG).show();
+                }
+
+
+                if((horasEstimadas.getText().length()!=0)&&(editDescripcion.getText().length()!=0)&&
+                        (responsable.getSelectedItem().toString()!=" Seleccione Responsable ")){
+                    Tarea tarea = new Tarea (1, false, Integer.parseInt(horasEstimadas.getText().toString()), 0, editDescripcion.getText().toString(), proyecto, prioridad, userNuevo);
                     myDao.nuevaTarea(tarea);
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                     startActivity(intent);
-                    Toast.makeText(getApplicationContext(),"Id tarea: "+ tarea.getId(),Toast.LENGTH_LONG).show();
-
                 }
                 else {
-                    Toast.makeText(getApplicationContext(),"Ingrese descripción y horas estimadas",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Ingrese descripción, horas estimadas y responsable",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -195,10 +227,10 @@ public class AltaTareaActivity extends AppCompatActivity {
                     if(fila== 0)columnas[i]=c.getColumnName(i);
                     unContacto.put(columnas[i],c.getString(i));
                 }
-                Log.d("TEST-ARR",unContacto.toString());
+                //Log.d("TEST-ARR",unContacto.toString());
                 arr.put(fila,unContacto);
                 fila++;
-                Log.d("TEST-ARR","fila : "+fila);
+                //Log.d("TEST-ARR","fila : "+fila);
 
                 // elegir columnas de ejemplo
                 resultado.append(unContacto.get("display_name"));
@@ -206,7 +238,7 @@ public class AltaTareaActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d("TEST-ARR",arr.toString());
+        //Log.d("TEST-ARR",arr.toString());
         for(int i=0;i<fila;i++){
             try {
                 listaResponsables.add(arr.getJSONObject(i).get("sort_key").toString());
