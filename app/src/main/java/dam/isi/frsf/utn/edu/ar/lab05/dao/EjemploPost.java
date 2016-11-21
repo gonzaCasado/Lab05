@@ -21,6 +21,7 @@ import java.util.List;
 
 import dam.isi.frsf.utn.edu.ar.lab05.modelo.Tarea;
 
+
 public class EjemploPost {
 
     static final String IP_SERVER = "192.168.1.11";
@@ -50,6 +51,48 @@ public class EjemploPost {
             //Log.d("EjemploPost","str---> "+str);
 
             URL url = new URL("http://"+IP_SERVER+":"+PORT_SERVER+"/tareas/");
+
+            // VER AQUI https://developer.android.com/reference/java/net/HttpURLConnection.html
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestMethod(operacion);
+            urlConnection.setFixedLengthStreamingMode(data.length);
+            urlConnection.setRequestProperty("Content-Type","application/json");
+            DataOutputStream printout = new DataOutputStream(urlConnection.getOutputStream());
+
+            printout.write(data);
+            printout.flush ();
+            printout.close ();
+            //Log.d("TEST-ARR","FIN!!! "+urlConnection.getResponseMessage());
+
+        }catch (JSONException e2) {
+            Log.e("TEST-ARR",e2.getMessage(),e2);
+            e2.printStackTrace();
+        }  catch (IOException e1) {
+            Log.e("TEST-ARR",e1.getMessage(),e1);
+            e1.printStackTrace();
+        }finally {
+            urlConnection.disconnect();
+        }
+    }
+
+    // OPERACION POST (nueva tarea)
+    public static void agregaContacto(String operacion, String nombre, String correo){
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        HttpURLConnection urlConnection=null;
+        try {
+            JSONObject nuevoObjeto= new JSONObject();
+            nuevoObjeto.put("nombre",nombre);
+            nuevoObjeto.put("correoElectronico",correo);
+
+            String str= nuevoObjeto.toString();
+            byte[] data=str.getBytes("UTF-8");
+            //Log.d("EjemploPost","str---> "+str);
+
+            URL url = new URL("http://"+IP_SERVER+":"+PORT_SERVER+"/usuarios/");
 
             // VER AQUI https://developer.android.com/reference/java/net/HttpURLConnection.html
             urlConnection = (HttpURLConnection) url.openConnection();

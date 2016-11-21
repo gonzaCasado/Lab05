@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import dam.isi.frsf.utn.edu.ar.lab05.dao.EjemploPost;
 import dam.isi.frsf.utn.edu.ar.lab05.dao.ProyectoDAO;
 import dam.isi.frsf.utn.edu.ar.lab05.modelo.Prioridad;
 import dam.isi.frsf.utn.edu.ar.lab05.modelo.Proyecto;
@@ -148,6 +149,7 @@ public class AltaTareaActivity extends AppCompatActivity {
                     nombre=responsable.getSelectedItem().toString();
                     userNuevo=new Usuario(1, nombre, nombre+"@gmail.com");
                     myDao.nuevoUser(userNuevo);
+                    EjemploPost.agregaContacto("POST",nombre,nombre+"@gmail.com");
                 }
                 else {
                     Toast.makeText(getApplicationContext(),"Ingrese descripción, horas estimadas y responsable",Toast.LENGTH_LONG).show();
