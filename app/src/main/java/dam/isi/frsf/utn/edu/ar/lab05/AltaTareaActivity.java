@@ -107,18 +107,18 @@ public class AltaTareaActivity extends AppCompatActivity {
                             break;
                         }
                     }
-                    if(userNuevo==null&&responsable.getSelectedItem().toString()!=" Seleccione Responsable "){
+                    if(userNuevo==null&&responsable.getSelectedItem().toString()!=" Seleccione Responsable "
+                            &&responsable.getSelectedItem().toString()!=" - ingrese nombre de contacto - "){
                         nombre=responsable.getSelectedItem().toString();
-                        userNuevo=new Usuario(1, nombre, nombre+"@gmail.com");
+                        userNuevo=new Usuario(5, nombre, nombre+"@gmail.com");
                         myDao.nuevoUser(userNuevo);
+                        EjemploPost.agregaContacto("POST", nombre, nombre+"@gmail.com");
+
                     }
-                    else {
-                        Toast.makeText(getApplicationContext(),"Ingrese descripción, horas estimadas y responsable",Toast.LENGTH_LONG).show();
-                    }
-                    if((horasEstimadas.getText().length()!=0)&&editDescripcion.getText().length()!=0&&
-                            (responsable.getSelectedItem().toString()!=" Seleccione Responsable ")){
+                    else if((horasEstimadas.getText().length()!=0)&&editDescripcion.getText().length()!=0&&
+                            (responsable.getSelectedItem().toString()!=" Seleccione Responsable ")
+                            &&(responsable.getSelectedItem().toString()!=" - ingrese nombre de contacto - ")){
                         myDao.editarTarea(tareaAEditar,Integer.parseInt(horasEstimadas.getText().toString()), editDescripcion.getText().toString(), userNuevo );
-                        System.out.println("EL USUARIO QUE AGREGASTE SE LLAMA:    "+ userNuevo.getNombre());
                         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                         startActivity(intent);
                     }
@@ -145,19 +145,17 @@ public class AltaTareaActivity extends AppCompatActivity {
                         break;
                     }
                 }
-                if(userNuevo==null&&responsable.getSelectedItem().toString()!=" Seleccione Responsable "){
+                if(userNuevo==null&&responsable.getSelectedItem().toString()!=" Seleccione Responsable "
+                        &&responsable.getSelectedItem().toString()!=" - ingrese nombre de contacto - "){
                     nombre=responsable.getSelectedItem().toString();
-                    userNuevo=new Usuario(1, nombre, nombre+"@gmail.com");
+                    userNuevo=new Usuario(5, nombre, nombre+"@gmail.com");
                     myDao.nuevoUser(userNuevo);
-                    EjemploPost.agregaContacto("POST",nombre,nombre+"@gmail.com");
-                }
-                else {
-                    Toast.makeText(getApplicationContext(),"Ingrese descripción, horas estimadas y responsable",Toast.LENGTH_LONG).show();
-                }
+                    EjemploPost.agregaContacto("POST", nombre, nombre+"@gmail.com");
 
-
-                if((horasEstimadas.getText().length()!=0)&&(editDescripcion.getText().length()!=0)&&
-                        (responsable.getSelectedItem().toString()!=" Seleccione Responsable ")){
+                }
+                else if((horasEstimadas.getText().length()!=0)&&(editDescripcion.getText().length()!=0)&&
+                        (responsable.getSelectedItem().toString()!=" Seleccione Responsable ")
+                        &&responsable.getSelectedItem().toString()!=" - ingrese nombre de contacto - "){
                     Tarea tarea = new Tarea (1, false, Integer.parseInt(horasEstimadas.getText().toString()), 0, editDescripcion.getText().toString(), proyecto, prioridad, userNuevo);
                     myDao.nuevaTarea(tarea);
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);
