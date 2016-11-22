@@ -251,7 +251,7 @@ public class EjemploPost {
 
             for (int i = 0; i < jsonCadena.length(); i++) {
                 lista_tareas.add(new Tarea(jsonCadena.getJSONObject(i)));
-                //Log.d("Pruebaaa: ",lista_tareas.get(i).getDescripcion().toString());
+                Log.d("Pruebaaa: ",lista_tareas.get(i).getDescripcion().toString());
             }
         }
         catch (IOException e) {
