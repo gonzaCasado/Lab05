@@ -304,4 +304,62 @@ public class EjemploPost {
         return lista_proyectos;
     }
 
+    public static void actualizarTarea(String operacion,Integer idTarea, long tiempoActual) {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        long tiempoJson=0;
+        List listaTareas = leerNoticias();
+
+        HttpURLConnection urlConnection=null;
+
+        try {
+            JSONObject nuevoObjeto= new JSONObject();
+
+
+            for(int i=0;i<listaTareas.size();i++){
+
+                if(((Tarea)listaTareas.get(i)).getId()==idTarea) {
+                    nuevoObjeto.put("descripcion",(((Tarea) listaTareas.get(i)).getDescripcion()));
+                    nuevoObjeto.put("horasEstimadas: ",(((Tarea) listaTareas.get(i)).getHorasEstimadas()));
+                    nuevoObjeto.put("finalizada",(((Tarea) listaTareas.get(i)).getTerminada()));
+                    tiempoJson=((Tarea)listaTareas.get(i)).getMinutosTrabajados()+tiempoActual;
+                    nuevoObjeto.put("minutosTrabajados",tiempoJson);
+                    nuevoObjeto.put("prioridadId", ((Tarea) listaTareas.get(i)).getPrioridad().getId());
+                    nuevoObjeto.put("proyectoId", ((Tarea) listaTareas.get(i)).getProyecto().getId());
+                    nuevoObjeto.put("usuarioId",((Tarea) listaTareas.get(i)).getResponsable().getId());
+                }
+            }
+
+
+            String str= nuevoObjeto.toString();
+            byte[] data=str.getBytes("UTF-8");
+            //Log.d("EjemploPost","str---> "+str);
+            Log.d("TEST-ARR","EDITADO: "+idTarea);
+
+
+            URL url = new URL("http://"+IP_SERVER+":"+PORT_SERVER+"/tareas/"+idTarea);
+
+            // VER AQUI https://developer.android.com/reference/java/net/HttpURLConnection.html
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestMethod(operacion);
+            urlConnection.setFixedLengthStreamingMode(data.length);
+            urlConnection.setRequestProperty("Content-Type","application/json");
+            DataOutputStream printout = new DataOutputStream(urlConnection.getOutputStream());
+
+            printout.write(data);
+            printout.flush ();
+            printout.close ();
+            //Log.d("TEST-ARR","FIN!!! "+urlConnection.getResponseMessage());
+
+        }catch (JSONException e2) {
+            Log.e("TEST-ARR",e2.getMessage(),e2);
+            e2.printStackTrace();
+        }  catch (IOException e1) {
+            Log.e("TEST-ARR",e1.getMessage(),e1);
+            e1.printStackTrace();
+        }finally {
+            urlConnection.disconnect();
+        }
+    }
 }

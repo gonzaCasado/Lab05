@@ -138,11 +138,12 @@ public class ProyectoDAO {
 
     public void actualizarTarea(int id, long tiempoTrabajado){
 
+EjemploPost.actualizarTarea("PUT",id,tiempoTrabajado);
         SQLiteDatabase mydb =dbHelper.getWritableDatabase();
         long tiempoNuevo = 0;
         ContentValues valores = new ContentValues();
         String consulta = "SELECT "+ProyectoDBMetadata.TablaTareasMetadata.MINUTOS_TRABAJADOS+" FROM "+ProyectoDBMetadata.TABLA_TAREAS + " WHERE " +ProyectoDBMetadata.TablaPrioridadMetadata._ID + " = " + Integer.toString(id);
-        System.out.println("long: "+consulta);
+        //System.out.println("long: "+consulta);
         Cursor cursorPry = mydb.rawQuery(consulta,null);
 
         if(cursorPry.moveToFirst()){

@@ -95,7 +95,8 @@ public class AdapterTarea extends ArrayAdapter<Tarea> {
                     tiempoActual = (System.currentTimeMillis() - tiempoActual) / 5000;
                     final Integer idTarea= (Integer) view.getTag();
 
-                    myDao.actualizarTarea(idTarea,tiempoActual);
+                    //myDao.actualizarTarea(idTarea,tiempoActual);
+                    EjemploPost.actualizarTarea("PUT",idTarea,tiempoActual);
 
                     Intent intentActualizar = new Intent(contexto,MainActivity.class);
                     contexto.startActivity(intentActualizar);
