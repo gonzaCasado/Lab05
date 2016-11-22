@@ -31,8 +31,11 @@ import android.widget.Toast;
 
 
 import java.util.Arrays;
+import java.util.List;
 
+import dam.isi.frsf.utn.edu.ar.lab05.dao.EjemploPost;
 import dam.isi.frsf.utn.edu.ar.lab05.dao.ProyectoDAO;
+import dam.isi.frsf.utn.edu.ar.lab05.modelo.Tarea;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,8 +43,10 @@ public class MainActivity extends AppCompatActivity {
     private ProyectoDAO proyectoDAO;
     private Cursor cursor;
     private TareaCursorAdapter tca;
+    private AdapterTarea adapterTarea;
     private boolean flagPermisoPedido;
     private static final int PERMISSION_REQUEST_CONTACT =999;
+    private List<Tarea> listaTareas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +66,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intActAlta);
             }
         });
-
+        //listaTareas = EjemploPost.leerNoticias();
+       // adapterTarea = new AdapterTarea(MainActivity.this,listaTareas);
 
         lvTareas = (ListView) findViewById(R.id.listaTareas);
-        lvTareas.setAdapter( tca );
+        //lvTareas.setAdapter( tca );
+        lvTareas.setAdapter(adapterTarea);
 
 
     }
@@ -77,8 +84,12 @@ public class MainActivity extends AppCompatActivity {
         proyectoDAO.open();
         cursor = proyectoDAO.listaTareas(1);
 
-        tca = new TareaCursorAdapter(MainActivity.this,cursor,proyectoDAO);
-        lvTareas.setAdapter(tca);
+       // tca = new TareaCursorAdapter(MainActivity.this,cursor,proyectoDAO);
+        listaTareas = EjemploPost.leerNoticias();
+        adapterTarea = new AdapterTarea(MainActivity.this,listaTareas);
+
+        //lvTareas.setAdapter(tca);
+        lvTareas.setAdapter(adapterTarea);
         lvTareas.deferNotifyDataSetChanged();
 
     }
