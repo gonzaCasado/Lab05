@@ -1,5 +1,8 @@
 package dam.isi.frsf.utn.edu.ar.lab05.modelo;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by mdominguez on 06/10/16.
  */
@@ -21,6 +24,12 @@ public class Proyecto {
     public Proyecto(Integer id){
         this.id=id;
     }
+
+    public Proyecto(JSONObject jsonJSON) throws JSONException {
+        this.id=jsonJSON.getInt("id");
+        this.nombre=jsonJSON.getString("nombre");
+    }
+
 
     public Integer getId() {
         return id;

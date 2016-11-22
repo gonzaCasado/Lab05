@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intActAlta);
             }
         });
-        //listaTareas = EjemploPost.leerNoticias();
-       // adapterTarea = new AdapterTarea(MainActivity.this,listaTareas);
+        listaTareas = EjemploPost.leerNoticias();
+        adapterTarea = new AdapterTarea(MainActivity.this,listaTareas);
 
         lvTareas = (ListView) findViewById(R.id.listaTareas);
         //lvTareas.setAdapter( tca );

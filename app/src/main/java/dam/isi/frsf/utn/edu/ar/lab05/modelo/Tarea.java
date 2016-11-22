@@ -8,7 +8,7 @@ import org.json.JSONObject;
  */
 public class Tarea {
 
-    private Integer id;
+    private int id;
     private Boolean terminada;
     private Integer horasEstimadas;
     private Integer minutosTrabajados;
@@ -32,7 +32,7 @@ public class Tarea {
     }
 
     public Tarea(JSONObject objetoJSON) throws JSONException {
-        this.id = objetoJSON.getInt("id");
+        this.id = objetoJSON.getInt("id"); //PROBAR..IF ID>500...this.id = Integer.parseInt(objetoJSON.getString("id"));
         this.terminada=false;
         this.horasEstimadas = objetoJSON.getInt("horasEstimadas");
         this.minutosTrabajados = objetoJSON.getInt("minutosTrabajados");

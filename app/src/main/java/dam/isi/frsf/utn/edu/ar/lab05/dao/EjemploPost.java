@@ -19,12 +19,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import dam.isi.frsf.utn.edu.ar.lab05.modelo.Proyecto;
 import dam.isi.frsf.utn.edu.ar.lab05.modelo.Tarea;
 
 
 public class EjemploPost {
 
-    static final String IP_SERVER = "192.168.1.11";
+    static final String IP_SERVER = "192.168.0.15";//"192.168.1.11";
     static final String PORT_SERVER = "4000";
 
     // OPERACION POST (nueva tarea)
@@ -76,7 +77,7 @@ public class EjemploPost {
         }
     }
 
-    // OPERACION POST (nueva tarea)
+    // OPERACION POST (agrega contacto)
     public static void agregaContacto(String operacion, String nombre, String correo){
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -118,9 +119,10 @@ public class EjemploPost {
         }
     }
 
+
+
     //OPERACION PUT (editar tarea)
     public static void enviarOperacionToAPIUPDATE(int idTarea, String operacion, int hsEstimadas, String descripcion, int responsable){
-
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
@@ -136,7 +138,6 @@ public class EjemploPost {
             for(int i=0;i<listaTareas.size();i++){
 
                 if(((Tarea)listaTareas.get(i)).getId()==idTarea) {
-
                     nuevoObjeto.put("finalizada",(((Tarea) listaTareas.get(i)).getTerminada()));
                     nuevoObjeto.put("minutosTrabajados", ((Tarea) listaTareas.get(i)).getMinutosTrabajados());
                     nuevoObjeto.put("prioridadId", ((Tarea) listaTareas.get(i)).getPrioridad().getId());
@@ -144,11 +145,13 @@ public class EjemploPost {
                 }
             }
             nuevoObjeto.put("usuarioId", responsable);
+            nuevoObjeto.put("id",idTarea);
 
             String str= nuevoObjeto.toString();
             byte[] data=str.getBytes("UTF-8");
             //Log.d("EjemploPost","str---> "+str);
             Log.d("TEST-ARR","EDITADO: "+idTarea);
+
 
             URL url = new URL("http://"+IP_SERVER+":"+PORT_SERVER+"/tareas/"+idTarea);
 
@@ -231,7 +234,7 @@ public class EjemploPost {
 
         HttpURLConnection urlConnection=null;
         try {
-            URL url= new URL("http://192.168.1.11:4000/tareas");
+            URL url= new URL("http://"+IP_SERVER+":"+PORT_SERVER+"/tareas");
             urlConnection= (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             InputStreamReader isw= new InputStreamReader(in);
@@ -260,5 +263,48 @@ public class EjemploPost {
                 urlConnection.disconnect();
         }
         return lista_tareas;
+    }
+
+
+    public static List<Proyecto> traerProyectos(){
+
+        JSONArray jsonCadena;
+        String json;
+        List<Proyecto> lista_proyectos = new ArrayList<>();
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        HttpURLConnection urlConnection=null;
+        try {
+            URL url= new URL("http://"+IP_SERVER+":"+PORT_SERVER+"/proyectos");
+            urlConnection= (HttpURLConnection) url.openConnection();
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            InputStreamReader isw= new InputStreamReader(in);
+            StringBuilder sb= new StringBuilder();
+            int data = isw.read();
+            while(data != -1) {
+                char current= (char) data;
+                sb.append(current);
+                data = isw.read();
+            }
+
+            json = sb.toString();
+            jsonCadena  = new JSONArray(json);
+
+            for (int i = 0; i < jsonCadena.length(); i++) {
+                lista_proyectos.add(new Proyecto(jsonCadena.getJSONObject(i)));
+                //Log.d("Pruebaaa: ",lista_proyectos.get(i).getDescripcion().toString());
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally{
+            if(urlConnection!=null)
+                urlConnection.disconnect();
+        }
+        return lista_proyectos;
     }
 }
