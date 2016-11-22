@@ -29,7 +29,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="266dp"
+            android:layout_height="59dp"
             android:layout_marginTop="8dp">
 
             <Button
@@ -51,9 +51,10 @@
                 android:id="@+id/buttonCrearProyecto" />
         </LinearLayout>
 
-        <ListView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/listView" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/listaTareas" />
     </LinearLayout>
 </RelativeLayout>

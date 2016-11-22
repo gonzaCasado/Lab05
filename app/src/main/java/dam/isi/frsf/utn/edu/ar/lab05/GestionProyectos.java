@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import dam.isi.frsf.utn.edu.ar.lab05.dao.EjemploPost;
 import dam.isi.frsf.utn.edu.ar.lab05.modelo.Proyecto;
+import dam.isi.frsf.utn.edu.ar.lab05.modelo.Tarea;
 
 public class GestionProyectos extends AppCompatActivity {
 
@@ -41,6 +43,7 @@ public class GestionProyectos extends AppCompatActivity {
         Button btnVerTareas = (Button) findViewById(R.id.buttonVerTareas);
         Button btnEliminar = (Button) findViewById(R.id.buttonEliminarProyecto);
         Button btnCrearProyecto = (Button) findViewById(R.id.buttonCrearProyecto);
+        final TextView listaTareas = (TextView) findViewById(R.id.listaTareas);
 
         listaProyectos.add("Seleccione un proyecto");
         for(int i=0;i<proyectosServer.size();i++){
@@ -85,7 +88,25 @@ public class GestionProyectos extends AppCompatActivity {
                 createDialogo();
             }
         });
+        btnVerTareas.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                int id = 1;
+                for(int i=0;i<proyectosServer.size();i++){
+                    if(proyectos.getSelectedItem().toString() == proyectosServer.get(i).getNombre()){
+                        id = proyectosServer.get(i).getId();
+                        break;
+                    }
+                }
+                List<Tarea> tareas = EjemploPost.buscarTareas(id);
+                listaTareas.setText("");
+                for(int i = 0; i < tareas.size(); i++){
+                    listaTareas.append(tareas.get(i).getDescripcion());
+                    listaTareas.append("\n");
+                }
 
+            }
+        });
     }
 
     public void createDialogo() {

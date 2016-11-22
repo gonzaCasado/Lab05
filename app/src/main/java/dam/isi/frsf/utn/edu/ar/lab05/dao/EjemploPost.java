@@ -293,7 +293,6 @@ public class EjemploPost {
 
             for (int i = 0; i < jsonCadena.length(); i++) {
                 lista_proyectos.add(new Proyecto(jsonCadena.getJSONObject(i)));
-                //Log.d("Pruebaaa: ",lista_proyectos.get(i).getDescripcion().toString());
             }
         }
         catch (IOException e) {
@@ -408,5 +407,19 @@ public class EjemploPost {
         }finally {
             urlConnection.disconnect();
         }
+    }
+
+    public static List<Tarea> buscarTareas(int proyecto){
+
+        List<Tarea> lista_tareas = leerNoticias();
+        List<Tarea> lista_tareas_proyecto = new ArrayList<Tarea>();
+
+        for(int i = 0; i < lista_tareas.size(); i++){
+            if(lista_tareas.get(i).getProyecto().getId() == proyecto){
+                lista_tareas_proyecto.add(lista_tareas.get(i));
+            }
+        }
+
+        return lista_tareas_proyecto;
     }
 }
