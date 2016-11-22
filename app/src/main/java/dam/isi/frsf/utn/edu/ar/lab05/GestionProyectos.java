@@ -83,12 +83,6 @@ public class GestionProyectos extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 createDialogo();
-                if(nombreProyectoNuevo!=null){
-                    Proyecto nuevo = new Proyecto(PROYECTO_ID, nombreProyectoNuevo);
-                    EjemploPost.agregaProyecto("POST", nuevo);
-                }
-                else {Toast.makeText(getApplicationContext(),"Ingrese nombre de proyecto", Toast.LENGTH_LONG).show();}
-
             }
         });
 
@@ -114,7 +108,13 @@ public class GestionProyectos extends AppCompatActivity {
                         OptionDialog.dismiss();
 
                         nombreProyectoNuevo=text;
-                        listaProyectos.add(nombreProyectoNuevo);
+                        if(!nombreProyectoNuevo.isEmpty()){
+                            listaProyectos.add(nombreProyectoNuevo);
+                            Proyecto nuevo = new Proyecto(PROYECTO_ID, nombreProyectoNuevo);
+                            EjemploPost.agregaProyecto("POST", nuevo);
+                        }
+                        else {Toast.makeText(getApplicationContext(),"Ingrese nombre de proyecto", Toast.LENGTH_LONG).show();}
+
 
                     }
                 }
