@@ -190,7 +190,7 @@ public class EjemploPost {
             JSONObject nuevoObjeto= new JSONObject();
             String str= nuevoObjeto.toString();
             byte[] data=str.getBytes("UTF-8");
-           // Log.d("EjemploPost","str---> "+str);
+            // Log.d("EjemploPost","str---> "+str);
 
             URL url = new URL("http://"+IP_SERVER+":"+PORT_SERVER+"/tareas/"+id);
             Log.d("TEST-ARR","BORRADO: "+id);
