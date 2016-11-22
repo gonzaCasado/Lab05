@@ -74,7 +74,6 @@ public class AltaTareaActivity extends AppCompatActivity {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         responsable.setAdapter(spinnerAdapter);
 
-
         responsable.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

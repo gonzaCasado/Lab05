@@ -1,11 +1,14 @@
 package dam.isi.frsf.utn.edu.ar.lab05;
 
+import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +23,7 @@ public class GestionProyectos extends AppCompatActivity {
 
     ArrayList<String> listaProyectos = new ArrayList<>();
     static List<Proyecto> proyectosServer = EjemploPost.traerProyectos();
+    private String nombreProyectoNuevo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +40,6 @@ public class GestionProyectos extends AppCompatActivity {
         Button btnVerTareas = (Button) findViewById(R.id.buttonVerTareas);
         Button btnEliminar = (Button) findViewById(R.id.buttonEliminarProyecto);
         Button btnCrearProyecto = (Button) findViewById(R.id.buttonCrearProyecto);
-
-
-        System.out.println("HOLAAAAAAAAAAA: "+proyectosServer.size());
-
-
 
         listaProyectos.add("Seleccione un proyecto");
         for(int i=0;i<proyectosServer.size();i++){
@@ -70,6 +69,7 @@ public class GestionProyectos extends AppCompatActivity {
                         String p = proyectos.getItemAtPosition(position).toString();
                         proyectoSeleccionado.setText(p);
 
+
                 }
             }
             @Override
@@ -77,6 +77,47 @@ public class GestionProyectos extends AppCompatActivity {
 
             }
         });
+
+        btnCrearProyecto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createDialogo();
+                if(nombreProyectoNuevo!=null){
+                    Proyecto nuevo = new Proyecto(2,nombreProyectoNuevo);
+                }
+
+            }
+        });
+
+    }
+
+    public void createDialogo() {
+        final AlertDialog OptionDialog = new AlertDialog.Builder(this).create();
+        LayoutInflater inflater = this.getLayoutInflater();
+        View v = inflater.inflate(R.layout.dialog_proyecto, null);
+
+
+        OptionDialog.setView(v);
+
+        Button crear = (Button) v.findViewById(R.id.agregar_boton);
+
+        crear.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        EditText edit=(EditText) OptionDialog.findViewById(R.id.proyecto_input);
+                        String text=edit.getText().toString();
+                        OptionDialog.dismiss();
+
+                        nombreProyectoNuevo=text;
+                        listaProyectos.add(nombreProyectoNuevo);
+
+                    }
+                }
+
+        );
+        OptionDialog.show();
 
     }
 }
