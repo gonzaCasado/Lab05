@@ -85,8 +85,9 @@ public class GestionProyectos extends AppCompatActivity {
                 createDialogo();
                 if(nombreProyectoNuevo!=null){
                     Proyecto nuevo = new Proyecto(PROYECTO_ID, nombreProyectoNuevo);
-                    EjemploPost.agregaProyecto("PUSH", nuevo);
+                    EjemploPost.agregaProyecto("POST", nuevo);
                 }
+                else {Toast.makeText(getApplicationContext(),"Ingrese nombre de proyecto", Toast.LENGTH_LONG).show();}
 
             }
         });

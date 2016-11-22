@@ -375,6 +375,7 @@ public class EjemploPost {
             JSONObject nuevoObjeto= new JSONObject();
             nuevoObjeto.put("nombre",proyecto.getNombre());
 
+
             String str= nuevoObjeto.toString();
             byte[] data=str.getBytes("UTF-8");
             //Log.d("EjemploPost","str---> "+str);
