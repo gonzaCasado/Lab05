@@ -140,6 +140,8 @@ public class EjemploPost {
                     nuevoObjeto.put("minutosTrabajados", ((Tarea) listaTareas.get(i)).getMinutosTrabajados());
                     nuevoObjeto.put("proyectoId", ((Tarea) listaTareas.get(i)).getProyecto().getId());
                     nuevoObjeto.put("prioridadId", ((Tarea) listaTareas.get(i)).getPrioridad().getId());
+                    nuevoObjeto.put("id",idTarea);
+                    break;
 
                 }
             }
@@ -328,8 +330,10 @@ public class EjemploPost {
                     nuevoObjeto.put("proyectoId", ((Tarea) listaTareas.get(i)).getProyecto().getId());
                     nuevoObjeto.put("prioridadId", ((Tarea) listaTareas.get(i)).getPrioridad().getId());
                     nuevoObjeto.put("usuarioId",((Tarea) listaTareas.get(i)).getResponsable().getId());
-                    //nuevoObjeto.put("id",((Tarea) listaTareas.get(i)).getId());
+                    nuevoObjeto.put("id",idTarea);
+                    break;
                 }
+
             }
 
 
