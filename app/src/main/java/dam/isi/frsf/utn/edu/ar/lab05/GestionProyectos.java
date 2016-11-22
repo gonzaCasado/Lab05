@@ -19,6 +19,7 @@ import dam.isi.frsf.utn.edu.ar.lab05.modelo.Proyecto;
 public class GestionProyectos extends AppCompatActivity {
 
     ArrayList<String> listaProyectos = new ArrayList<>();
+    static List<Proyecto> proyectosServer = EjemploPost.traerProyectos();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +37,15 @@ public class GestionProyectos extends AppCompatActivity {
         Button btnEliminar = (Button) findViewById(R.id.buttonEliminarProyecto);
         Button btnCrearProyecto = (Button) findViewById(R.id.buttonCrearProyecto);
 
-        List<Proyecto> proyectosServer = EjemploPost.traerProyectos();
+
+        System.out.println("HOLAAAAAAAAAAA: "+proyectosServer.size());
 
 
 
         listaProyectos.add("Seleccione un proyecto");
-        for(int i=0;i<proyectosServer.size();i++){
+/*        for(int i=0;i<proyectosServer.size();i++){
             listaProyectos.add(proyectosServer.get(i).getNombre());
-        }
+        }*/
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,listaProyectos);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         proyectos.setAdapter(spinnerAdapter);
