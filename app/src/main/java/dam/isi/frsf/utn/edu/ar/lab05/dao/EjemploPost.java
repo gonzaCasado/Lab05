@@ -40,8 +40,8 @@ public class EjemploPost {
             JSONObject nuevoObjeto= new JSONObject();
             nuevoObjeto.put("descripcion",descripcion);
             nuevoObjeto.put("horasEstimadas",hsEstimadas);
-            nuevoObjeto.put("finalizada",false);
             nuevoObjeto.put("minutosTrabajados", minT);
+            nuevoObjeto.put("finalizada",false);
             nuevoObjeto.put("proyectoId", proyecto);
             nuevoObjeto.put("prioridadId",prioridad);
             nuevoObjeto.put("usuarioId", responsable);
@@ -133,19 +133,21 @@ public class EjemploPost {
         try {
             JSONObject nuevoObjeto= new JSONObject();
             nuevoObjeto.put("descripcion",descripcion);
-            nuevoObjeto.put("horasEstimadas: ",hsEstimadas);
+            nuevoObjeto.put("horasEstimadas",hsEstimadas);
 
             for(int i=0;i<listaTareas.size();i++){
 
                 if(((Tarea)listaTareas.get(i)).getId()==idTarea) {
-                    nuevoObjeto.put("finalizada",(((Tarea) listaTareas.get(i)).getTerminada()));
                     nuevoObjeto.put("minutosTrabajados", ((Tarea) listaTareas.get(i)).getMinutosTrabajados());
-                    nuevoObjeto.put("prioridadId", ((Tarea) listaTareas.get(i)).getPrioridad().getId());
+                    nuevoObjeto.put("finalizada",(((Tarea) listaTareas.get(i)).getTerminada()));
                     nuevoObjeto.put("proyectoId", ((Tarea) listaTareas.get(i)).getProyecto().getId());
+                    nuevoObjeto.put("prioridadId", ((Tarea) listaTareas.get(i)).getPrioridad().getId());
+
+                    //nuevoObjeto.put("id",((Tarea) listaTareas.get(i)).getId());
                 }
             }
             nuevoObjeto.put("usuarioId", responsable);
-            nuevoObjeto.put("id",idTarea);
+
 
             String str= nuevoObjeto.toString();
             byte[] data=str.getBytes("UTF-8");
@@ -251,7 +253,7 @@ public class EjemploPost {
 
             for (int i = 0; i < jsonCadena.length(); i++) {
                 lista_tareas.add(new Tarea(jsonCadena.getJSONObject(i)));
-                Log.d("Pruebaaa: ",lista_tareas.get(i).getDescripcion().toString());
+                Log.d("Pruebaaa: ",lista_tareas.get(i).getId().toString());
             }
         }
         catch (IOException e) {

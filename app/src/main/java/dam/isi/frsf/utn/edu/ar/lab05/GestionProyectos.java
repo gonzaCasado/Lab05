@@ -43,9 +43,9 @@ public class GestionProyectos extends AppCompatActivity {
 
 
         listaProyectos.add("Seleccione un proyecto");
-/*        for(int i=0;i<proyectosServer.size();i++){
+        for(int i=0;i<proyectosServer.size();i++){
             listaProyectos.add(proyectosServer.get(i).getNombre());
-        }*/
+        }
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,listaProyectos);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         proyectos.setAdapter(spinnerAdapter);
