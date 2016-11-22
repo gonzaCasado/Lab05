@@ -131,15 +131,16 @@ public class EjemploPost {
         try {
             JSONObject nuevoObjeto= new JSONObject();
             nuevoObjeto.put("descripcion",descripcion);
-            nuevoObjeto.put("horasEstimadas: ",hsEstimadas);
+            nuevoObjeto.put("horasEstimadas",hsEstimadas);
 
             for(int i=0;i<listaTareas.size();i++){
 
                 if(((Tarea)listaTareas.get(i)).getId()==idTarea) {
                     nuevoObjeto.put("finalizada",(((Tarea) listaTareas.get(i)).getTerminada()));
                     nuevoObjeto.put("minutosTrabajados", ((Tarea) listaTareas.get(i)).getMinutosTrabajados());
-                    nuevoObjeto.put("prioridadId", ((Tarea) listaTareas.get(i)).getPrioridad().getId());
                     nuevoObjeto.put("proyectoId", ((Tarea) listaTareas.get(i)).getProyecto().getId());
+                    nuevoObjeto.put("prioridadId", ((Tarea) listaTareas.get(i)).getPrioridad().getId());
+
                 }
             }
             nuevoObjeto.put("usuarioId", responsable);
@@ -320,13 +321,14 @@ public class EjemploPost {
 
                 if(((Tarea)listaTareas.get(i)).getId()==idTarea) {
                     nuevoObjeto.put("descripcion",(((Tarea) listaTareas.get(i)).getDescripcion()));
-                    nuevoObjeto.put("horasEstimadas: ",(((Tarea) listaTareas.get(i)).getHorasEstimadas()));
+                    nuevoObjeto.put("horasEstimadas",(((Tarea) listaTareas.get(i)).getHorasEstimadas()));
                     nuevoObjeto.put("finalizada",(((Tarea) listaTareas.get(i)).getTerminada()));
                     tiempoJson=((Tarea)listaTareas.get(i)).getMinutosTrabajados()+tiempoActual;
                     nuevoObjeto.put("minutosTrabajados",tiempoJson);
-                    nuevoObjeto.put("prioridadId", ((Tarea) listaTareas.get(i)).getPrioridad().getId());
                     nuevoObjeto.put("proyectoId", ((Tarea) listaTareas.get(i)).getProyecto().getId());
+                    nuevoObjeto.put("prioridadId", ((Tarea) listaTareas.get(i)).getPrioridad().getId());
                     nuevoObjeto.put("usuarioId",((Tarea) listaTareas.get(i)).getResponsable().getId());
+                    //nuevoObjeto.put("id",((Tarea) listaTareas.get(i)).getId());
                 }
             }
 
