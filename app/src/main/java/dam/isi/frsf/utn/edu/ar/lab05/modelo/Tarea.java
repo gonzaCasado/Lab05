@@ -8,7 +8,7 @@ import org.json.JSONObject;
  */
 public class Tarea {
 
-    private int id;
+    private Integer id;
     private Boolean terminada;
     private Integer horasEstimadas;
     private Integer minutosTrabajados;

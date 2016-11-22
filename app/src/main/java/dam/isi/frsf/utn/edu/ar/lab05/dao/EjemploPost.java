@@ -40,8 +40,8 @@ public class EjemploPost {
             JSONObject nuevoObjeto= new JSONObject();
             nuevoObjeto.put("descripcion",descripcion);
             nuevoObjeto.put("horasEstimadas",hsEstimadas);
-            nuevoObjeto.put("minutosTrabajados", minT);
             nuevoObjeto.put("finalizada",false);
+            nuevoObjeto.put("minutosTrabajados", minT);
             nuevoObjeto.put("proyectoId", proyecto);
             nuevoObjeto.put("prioridadId",prioridad);
             nuevoObjeto.put("usuarioId", responsable);
@@ -77,7 +77,7 @@ public class EjemploPost {
         }
     }
 
-    // OPERACION POST (agrega contacto)
+    // OPERACION POST (nueva tarea)
     public static void agregaContacto(String operacion, String nombre, String correo){
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -119,8 +119,6 @@ public class EjemploPost {
         }
     }
 
-
-
     //OPERACION PUT (editar tarea)
     public static void enviarOperacionToAPIUPDATE(int idTarea, String operacion, int hsEstimadas, String descripcion, int responsable){
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -133,21 +131,18 @@ public class EjemploPost {
         try {
             JSONObject nuevoObjeto= new JSONObject();
             nuevoObjeto.put("descripcion",descripcion);
-            nuevoObjeto.put("horasEstimadas",hsEstimadas);
+            nuevoObjeto.put("horasEstimadas: ",hsEstimadas);
 
             for(int i=0;i<listaTareas.size();i++){
 
                 if(((Tarea)listaTareas.get(i)).getId()==idTarea) {
-                    nuevoObjeto.put("minutosTrabajados", ((Tarea) listaTareas.get(i)).getMinutosTrabajados());
                     nuevoObjeto.put("finalizada",(((Tarea) listaTareas.get(i)).getTerminada()));
-                    nuevoObjeto.put("proyectoId", ((Tarea) listaTareas.get(i)).getProyecto().getId());
+                    nuevoObjeto.put("minutosTrabajados", ((Tarea) listaTareas.get(i)).getMinutosTrabajados());
                     nuevoObjeto.put("prioridadId", ((Tarea) listaTareas.get(i)).getPrioridad().getId());
-
-                    //nuevoObjeto.put("id",((Tarea) listaTareas.get(i)).getId());
+                    nuevoObjeto.put("proyectoId", ((Tarea) listaTareas.get(i)).getProyecto().getId());
                 }
             }
             nuevoObjeto.put("usuarioId", responsable);
-
 
             String str= nuevoObjeto.toString();
             byte[] data=str.getBytes("UTF-8");
@@ -194,7 +189,7 @@ public class EjemploPost {
             JSONObject nuevoObjeto= new JSONObject();
             String str= nuevoObjeto.toString();
             byte[] data=str.getBytes("UTF-8");
-            // Log.d("EjemploPost","str---> "+str);
+           // Log.d("EjemploPost","str---> "+str);
 
             URL url = new URL("http://"+IP_SERVER+":"+PORT_SERVER+"/tareas/"+id);
             Log.d("TEST-ARR","BORRADO: "+id);
@@ -253,7 +248,7 @@ public class EjemploPost {
 
             for (int i = 0; i < jsonCadena.length(); i++) {
                 lista_tareas.add(new Tarea(jsonCadena.getJSONObject(i)));
-                Log.d("Pruebaaa: ",lista_tareas.get(i).getId().toString());
+                //Log.d("Pruebaaa: ",lista_tareas.get(i).getDescripcion().toString());
             }
         }
         catch (IOException e) {
@@ -266,7 +261,6 @@ public class EjemploPost {
         }
         return lista_tareas;
     }
-
 
     public static List<Proyecto> traerProyectos(){
 
@@ -309,4 +303,5 @@ public class EjemploPost {
         }
         return lista_proyectos;
     }
+
 }
