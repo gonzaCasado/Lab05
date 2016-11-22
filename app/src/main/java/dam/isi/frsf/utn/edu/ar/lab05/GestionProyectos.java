@@ -24,6 +24,7 @@ public class GestionProyectos extends AppCompatActivity {
     ArrayList<String> listaProyectos = new ArrayList<>();
     static List<Proyecto> proyectosServer = EjemploPost.traerProyectos();
     private String nombreProyectoNuevo;
+    private static final int PROYECTO_ID = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +84,8 @@ public class GestionProyectos extends AppCompatActivity {
             public void onClick(View v) {
                 createDialogo();
                 if(nombreProyectoNuevo!=null){
-                    Proyecto nuevo = new Proyecto(2,nombreProyectoNuevo);
+                    Proyecto nuevo = new Proyecto(PROYECTO_ID, nombreProyectoNuevo);
+                    EjemploPost.agregaProyecto("PUSH", nuevo);
                 }
 
             }
