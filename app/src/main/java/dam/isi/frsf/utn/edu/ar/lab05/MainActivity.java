@@ -115,6 +115,9 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.Proyectos) {
             Intent intent = new Intent(getApplicationContext(),GestionProyectos.class);
             startActivity(intent);
+
+
+
             return true;
         }
 

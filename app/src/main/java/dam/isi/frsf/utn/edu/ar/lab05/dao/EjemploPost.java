@@ -374,9 +374,10 @@ public class EjemploPost {
         StrictMode.setThreadPolicy(policy);
 
         HttpURLConnection urlConnection=null;
+        String nombre= proyecto.getNombre();
         try {
             JSONObject nuevoObjeto= new JSONObject();
-            nuevoObjeto.put("nombre",proyecto.getNombre());
+            nuevoObjeto.put("nombre",nombre);
 
 
             String str= nuevoObjeto.toString();
@@ -401,6 +402,48 @@ public class EjemploPost {
         }catch (JSONException e2) {
             Log.e("TEST-ARR",e2.getMessage(),e2);
             e2.printStackTrace();
+        }  catch (IOException e1) {
+            Log.e("TEST-ARR",e1.getMessage(),e1);
+            e1.printStackTrace();
+        }finally {
+            urlConnection.disconnect();
+        }
+    }
+
+    public static void eliminarProyecto(String operacion, int id){
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        HttpURLConnection urlConnection=null;
+
+        try {
+
+            JSONObject nuevoObjeto= new JSONObject();
+            String str= nuevoObjeto.toString();
+            byte[] data=str.getBytes("UTF-8");
+            // Log.d("EjemploPost","str---> "+str);
+
+            URL url = new URL("http://"+IP_SERVER+":"+PORT_SERVER+"/proyectos/"+id);
+            Log.d("TEST-ARR","BORRADO: "+id);
+
+
+            // VER AQUI https://developer.android.com/reference/java/net/HttpURLConnection.html
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestMethod(operacion);
+            urlConnection.setFixedLengthStreamingMode(data.length);
+            urlConnection.setRequestProperty("Content-Type","application/json");
+            DataOutputStream printout = new DataOutputStream(urlConnection.getOutputStream());
+
+            printout.write(data);
+            printout.flush ();
+            printout.close ();
+            //Log.d("TEST-ARR","FIN!!! "+urlConnection.getResponseMessage());
+
+        /*}catch (JSONException e2) {
+            Log.e("TEST-ARR",e2.getMessage(),e2);
+            e2.printStackTrace();*/
         }  catch (IOException e1) {
             Log.e("TEST-ARR",e1.getMessage(),e1);
             e1.printStackTrace();

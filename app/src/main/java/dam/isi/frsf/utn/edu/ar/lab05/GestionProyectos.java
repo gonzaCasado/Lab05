@@ -26,7 +26,7 @@ public class GestionProyectos extends AppCompatActivity {
     ArrayList<String> listaProyectos = new ArrayList<>();
     static List<Proyecto> proyectosServer = EjemploPost.traerProyectos();
     private String nombreProyectoNuevo;
-    private static final int PROYECTO_ID = 5;
+    private static final int PROYECTO_ID = 6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +54,13 @@ public class GestionProyectos extends AppCompatActivity {
         proyectos.setAdapter(spinnerAdapter);
 
         /**
-         * Proyecto Seleccionado: mostrar el proyecto que se selecciono en el Spinner
+         * Proyecto Seleccionado: mostrar el proyecto que se selecciono en el Spinner LISTO...
          *
          * VER TAREAS: Mostrar el activity principal con las tareas de un proyecto determinado.
          *
          * ELIMINAR: Eliminar un proyecto y las tareas asociadas al mismo.
          *
-         * CREAR: Crear un proyecto nuevo.
+         * CREAR: Crear un proyecto nuevo. LISTO...
          */
 
         proyectos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -107,6 +107,19 @@ public class GestionProyectos extends AppCompatActivity {
 
             }
         });
+
+        btnEliminar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Proyecto aEliminar = new Proyecto();
+                for(int i=0;i<proyectosServer.size();i++){
+                    if(proyectosServer.get(i).getNombre().equals(proyectos.getSelectedItem().toString()))
+                        aEliminar=proyectosServer.get(i);
+                }
+                EjemploPost.eliminarProyecto("DELETE", aEliminar.getId());
+            }
+        });
+
     }
 
     public void createDialogo() {
