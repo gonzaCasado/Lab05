@@ -1,10 +1,8 @@
 package dam.isi.frsf.utn.edu.ar.lab05;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,18 +11,15 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CursorAdapter;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import java.util.Date;
 import java.util.List;
 
 import dam.isi.frsf.utn.edu.ar.lab05.dao.EjemploPost;
 import dam.isi.frsf.utn.edu.ar.lab05.dao.ProyectoDAO;
 import dam.isi.frsf.utn.edu.ar.lab05.dao.ProyectoDBMetadata;
 import dam.isi.frsf.utn.edu.ar.lab05.modelo.Proyecto;
-import dam.isi.frsf.utn.edu.ar.lab05.modelo.Tarea;
 
 
 public class TareaCursorAdapter extends CursorAdapter {
@@ -55,7 +50,7 @@ public class TareaCursorAdapter extends CursorAdapter {
         //obtener la posicion de la fila actual y asignarla a los botones y checkboxes
         int pos = cursor.getPosition();
 
-        List listaTareas = EjemploPost.leerNoticias();
+        List listaTareas = EjemploPost.getTareas();
 
         // Referencias UI.
         TextView nombre= (TextView) view.findViewById(R.id.tareaTitulo);

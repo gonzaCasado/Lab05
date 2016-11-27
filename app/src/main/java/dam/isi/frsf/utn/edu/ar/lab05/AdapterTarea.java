@@ -2,7 +2,6 @@ package dam.isi.frsf.utn.edu.ar.lab05;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +17,6 @@ import java.util.List;
 
 import dam.isi.frsf.utn.edu.ar.lab05.dao.EjemploPost;
 import dam.isi.frsf.utn.edu.ar.lab05.dao.ProyectoDAO;
-import dam.isi.frsf.utn.edu.ar.lab05.dao.ProyectoDBMetadata;
-import dam.isi.frsf.utn.edu.ar.lab05.modelo.Proyecto;
 import dam.isi.frsf.utn.edu.ar.lab05.modelo.Tarea;
 
 /**
@@ -37,11 +34,8 @@ public class AdapterTarea extends ArrayAdapter<Tarea> {
         inflater = LayoutInflater.from(context);
         contexto=context;
     }
-
-
     public View newView(Context context, ViewGroup viewGroup) {
-        inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View vista = inflater.inflate(R.layout.fila_tarea,viewGroup,false);
         return vista;
     }
@@ -60,10 +54,10 @@ public class AdapterTarea extends ArrayAdapter<Tarea> {
 
         Integer calculo = (this.getItem(position).getHorasEstimadas()*60);
         nombre.setText(this.getItem(position).getDescripcion().toString());
-        tiempoAsignado.setText( calculo.toString()+ " minutos");
-        tiempoTrabajado.setText(this.getItem(position).getMinutosTrabajados().toString()+ " minutos");
-        prioridad.setText(this.getItem(position).getPrioridad().getId().toString());
-        responsable.setText(this.getItem(position).getResponsable().getId().toString());
+        tiempoAsignado.setText("Total: " + calculo.toString()+ " minutos - ");
+        tiempoTrabajado.setText("Trabajado: " + this.getItem(position).getMinutosTrabajados().toString()+ " minutos");
+        prioridad.setText("  -   Prioridad: " + this.getItem(position).getPrioridad().getId().toString());
+        responsable.setText("Usuario: " + EjemploPost.getUsuario(this.getItem(position).getResponsable().getId()));
         finalizada.setText(this.getItem(position).getTerminada().toString());
 
         final Button btnFinalizar = (Button)   row.findViewById(R.id.tareaBtnFinalizada);
@@ -123,7 +117,7 @@ public class AdapterTarea extends ArrayAdapter<Tarea> {
         botonTacho.setTag(getItem(position).getId());
         botonTacho.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                EjemploPost.enviarOperacionToAPIDELETE("DELETE",getItem(position).getId());
+                EjemploPost.borrarTarea("DELETE",getItem(position).getId());
 
                 final Integer idTarea= (Integer) view.getTag();
                 //Proyecto proyecto = myDao.obtenerProyecto();
@@ -137,6 +131,5 @@ public class AdapterTarea extends ArrayAdapter<Tarea> {
         return (row);
 
     }
-
 
 }

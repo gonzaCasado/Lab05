@@ -78,7 +78,7 @@ public class ProyectoDAO {
 
     public void nuevaTarea(Tarea t){
 
-        EjemploPost.enviarOperacionToAPI("POST",t.getDescripcion().toString(),t.getResponsable().getId(),t.getHorasEstimadas(),t.getProyecto().getId(),t.getMinutosTrabajados(),t.getPrioridad().getId());
+        EjemploPost.nuevaTarea("POST",t.getDescripcion().toString(),t.getResponsable().getId(),t.getHorasEstimadas(),t.getProyecto().getId(),t.getMinutosTrabajados(),t.getPrioridad().getId());
         //Log.d("TEST-ARR","NUEVAtAREA: "+t.getId());
 
 
@@ -111,7 +111,7 @@ public class ProyectoDAO {
 
 
         Integer nuevasHoras = nuevasHorasEstimadas;
-        EjemploPost.enviarOperacionToAPIUPDATE(idTarea,"PUT",nuevasHoras,nuevaDesc,nuevoUsuario.getId());
+        EjemploPost.editarTarea(idTarea,"PUT",nuevasHoras,nuevaDesc,nuevoUsuario.getId());
 
 
         SQLiteDatabase mydb =dbHelper.getWritableDatabase();
@@ -157,7 +157,7 @@ EjemploPost.actualizarTarea("PUT",id,tiempoTrabajado);
     }
 
     public void borrarTarea(int idTarea){
-        EjemploPost.enviarOperacionToAPIDELETE("DELETE",idTarea);
+        EjemploPost.borrarTarea("DELETE",idTarea);
 
 
         SQLiteDatabase mydb =dbHelper.getWritableDatabase();

@@ -1,5 +1,8 @@
 package dam.isi.frsf.utn.edu.ar.lab05.modelo;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by mdominguez on 06/10/16.
  */
@@ -45,5 +48,10 @@ public class Usuario {
 
     public void setCorreoElectronico(String correoElectronico) {
         this.correoElectronico = correoElectronico;
+    }
+    public Usuario(JSONObject objetoJSON) throws JSONException {
+        this.id = objetoJSON.getInt("id");
+        this.nombre = objetoJSON.getString("nombre");
+        this.correoElectronico = objetoJSON.getString("correoElectronico");
     }
 }

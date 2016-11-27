@@ -64,10 +64,7 @@ public class MainActivity extends AppCompatActivity {
         lvTareas = (ListView) findViewById(R.id.listaTareas);
         //lvTareas.setAdapter( tca );
         lvTareas.setAdapter(adapterTarea);
-
-
     }
-
 
     @Override
     protected void onResume() {
@@ -77,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         cursor = proyectoDAO.listaTareas(1);
 
        // tca = new TareaCursorAdapter(MainActivity.this,cursor,proyectoDAO);
-        listaTareas = EjemploPost.leerNoticias();
+        listaTareas = EjemploPost.getTareas();
         adapterTarea = new AdapterTarea(MainActivity.this,listaTareas);
 
         //lvTareas.setAdapter(tca);

@@ -9,13 +9,13 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -39,9 +39,6 @@ public class AltaTareaActivity extends AppCompatActivity {
     String nombre;
     final ArrayList<String> listaResponsables = new ArrayList<>();
     Usuario userNuevo;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +79,6 @@ public class AltaTareaActivity extends AppCompatActivity {
                         createDialogo();
                         buscarContactos(nombre);
                         break;
-
                 }
             }
             @Override
@@ -111,7 +107,7 @@ public class AltaTareaActivity extends AppCompatActivity {
                         nombre=responsable.getSelectedItem().toString();
                         userNuevo=new Usuario(5, nombre, nombre+"@gmail.com");
                         myDao.nuevoUser(userNuevo);
-                        EjemploPost.agregaContacto("POST", nombre, nombre+"@gmail.com");
+                        EjemploPost.nuevoContacto("POST", nombre, nombre+"@gmail.com");
 
                     }
                     else if((horasEstimadas.getText().length()!=0)&&editDescripcion.getText().length()!=0&&
@@ -120,6 +116,7 @@ public class AltaTareaActivity extends AppCompatActivity {
                         myDao.editarTarea(tareaAEditar,Integer.parseInt(horasEstimadas.getText().toString()), editDescripcion.getText().toString(), userNuevo );
                         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                         startActivity(intent);
+
                     }
                     else {
                         Toast.makeText(getApplicationContext(),"Ingrese descripción, horas estimadas y responsable",Toast.LENGTH_LONG).show();
@@ -149,7 +146,7 @@ public class AltaTareaActivity extends AppCompatActivity {
                     nombre=responsable.getSelectedItem().toString();
                     userNuevo=new Usuario(5, nombre, nombre+"@gmail.com");
                     myDao.nuevoUser(userNuevo);
-                    EjemploPost.agregaContacto("POST", nombre, nombre+"@gmail.com");
+                    EjemploPost.nuevoContacto("POST", nombre, nombre+"@gmail.com");
 
                 }
                 else if((horasEstimadas.getText().length()!=0)&&(editDescripcion.getText().length()!=0)&&
@@ -202,7 +199,6 @@ public class AltaTareaActivity extends AppCompatActivity {
 
                     }
                 }
-
         );
         OptionDialog.show();
 
@@ -226,12 +222,8 @@ public class AltaTareaActivity extends AppCompatActivity {
                     if(fila== 0)columnas[i]=c.getColumnName(i);
                     unContacto.put(columnas[i],c.getString(i));
                 }
-                //Log.d("TEST-ARR",unContacto.toString());
                 arr.put(fila,unContacto);
                 fila++;
-                //Log.d("TEST-ARR","fila : "+fila);
-
-                // elegir columnas de ejemplo
                 resultado.append(unContacto.get("display_name"));
             }
         } catch (JSONException e) {
@@ -244,9 +236,6 @@ public class AltaTareaActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
-
     }
-
 }

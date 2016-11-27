@@ -9,7 +9,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,9 +23,10 @@ import dam.isi.frsf.utn.edu.ar.lab05.modelo.Tarea;
 public class GestionProyectos extends AppCompatActivity {
 
     ArrayList<String> listaProyectos = new ArrayList<>();
-    static List<Proyecto> proyectosServer = EjemploPost.traerProyectos();
+    static List<Proyecto> proyectosServer;
     private String nombreProyectoNuevo;
     private static final int PROYECTO_ID = 6;
+    Spinner proyectos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,28 +38,18 @@ public class GestionProyectos extends AppCompatActivity {
         super.onStart();
         setContentView(R.layout.activity_proyectos);
 
-        final Spinner proyectos = (Spinner) findViewById(R.id.spinnerProyectos);
+        proyectos = (Spinner) findViewById(R.id.spinnerProyectos);
         final TextView proyectoSeleccionado = (TextView) findViewById(R.id.textViewProyecto);
         Button btnVerTareas = (Button) findViewById(R.id.buttonVerTareas);
         Button btnEliminar = (Button) findViewById(R.id.buttonEliminarProyecto);
         Button btnCrearProyecto = (Button) findViewById(R.id.buttonCrearProyecto);
         final TextView listaTareas = (TextView) findViewById(R.id.listaTareas);
 
-        listaProyectos.add("Seleccione un proyecto");
-        for(int i=0;i<proyectosServer.size();i++){
-            listaProyectos.add(proyectosServer.get(i).getNombre());
-        }
-        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,listaProyectos);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        proyectos.setAdapter(spinnerAdapter);
-
+         llenarSpinner();
         /**
          * Proyecto Seleccionado: mostrar el proyecto que se selecciono en el Spinner LISTO...
-         *
          * VER TAREAS: Mostrar el activity principal con las tareas de un proyecto determinado.
-         *
          * ELIMINAR: Eliminar un proyecto y las tareas asociadas al mismo.
-         *
          * CREAR: Crear un proyecto nuevo. LISTO...
          */
 
@@ -104,7 +94,6 @@ public class GestionProyectos extends AppCompatActivity {
                     listaTareas.append(tareas.get(i).getDescripcion());
                     listaTareas.append("\n");
                 }
-
             }
         });
 
@@ -112,49 +101,53 @@ public class GestionProyectos extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Proyecto aEliminar = new Proyecto();
+
                 for(int i=0;i<proyectosServer.size();i++){
                     if(proyectosServer.get(i).getNombre().equals(proyectos.getSelectedItem().toString()))
                         aEliminar=proyectosServer.get(i);
                 }
-                EjemploPost.eliminarProyecto("DELETE", aEliminar.getId());
+                EjemploPost.borrarProyecto("DELETE", aEliminar.getId());
+                llenarSpinner();
             }
         });
-
     }
-
     public void createDialogo() {
         final AlertDialog OptionDialog = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = this.getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_proyecto, null);
 
-
         OptionDialog.setView(v);
 
         Button crear = (Button) v.findViewById(R.id.agregar_boton);
-
         crear.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         EditText edit=(EditText) OptionDialog.findViewById(R.id.proyecto_input);
                         String text=edit.getText().toString();
                         OptionDialog.dismiss();
-
                         nombreProyectoNuevo=text;
                         if(!nombreProyectoNuevo.isEmpty()){
-                            listaProyectos.add(nombreProyectoNuevo);
                             Proyecto nuevo = new Proyecto(PROYECTO_ID, nombreProyectoNuevo);
-                            EjemploPost.agregaProyecto("POST", nuevo);
+                            EjemploPost.nuevoProyecto("POST", nuevo);
+                            llenarSpinner();
                         }
                         else {Toast.makeText(getApplicationContext(),"Ingrese nombre de proyecto", Toast.LENGTH_LONG).show();}
-
-
                     }
                 }
-
         );
         OptionDialog.show();
+    }
 
+    public void llenarSpinner(){
+        proyectosServer = EjemploPost.getProyectos();
+        listaProyectos.clear();
+        listaProyectos.add("Seleccione un proyecto");
+        for(int i=0;i<proyectosServer.size();i++){
+            listaProyectos.add(proyectosServer.get(i).getNombre());
+        }
+        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,listaProyectos);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        proyectos.setAdapter(spinnerAdapter);
     }
 }
